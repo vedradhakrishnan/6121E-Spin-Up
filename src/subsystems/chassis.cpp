@@ -29,6 +29,12 @@ double tracker_inches(int ticks) {
   return (TRACKING_DIAM * M_PI) * (ticks / 360.0);
 }
 
+void initialize_aps(double x_i, double z_i, double theta_i) {
+  chassis_x = x_i;
+  chassis_z = z_i;
+  chassis_theta = theta_i;
+}
+
 void chassis_lock() {
   drive_bl.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   // drive_lc.set_brake_mode(E_MOTOR_BRAKE_HOLD);
@@ -59,7 +65,7 @@ void set_chassis(int left, int right) {
   drive_fr = right;
 }
 
-void odom_update() {
+void odom_update_aps() {
   //CHANGE IN ENCODER VALUES FOR TRACKING WHEELS
   //also resets the encoders so that we can find the change in the rotational encoder values from the next cycle
   double left = tracker_inches(odom_left.get_value());
@@ -211,7 +217,7 @@ void chassis_auton() {
 void chassis_task(void *parameter) {
   int time = 0;
   while (true) {
-    odom_update(); //put only in auton later
+    odom_update_aps(); //put only in auton later
     if (!competition::is_autonomous()) {
       tank_drive();
     } else {

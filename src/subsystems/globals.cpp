@@ -4,7 +4,7 @@ ADIEncoder odom_left(ENCODER_PORT_TL, ENCODER_PORT_BL, false);
 ADIEncoder odom_center(ENCODER_PORT_TC, ENCODER_PORT_BC, false);
 ADIEncoder odom_right(ENCODER_PORT_TR, ENCODER_PORT_BR, true);
 
-ADIDigitalOut expansion_left(EXPANSION_PORT);
+ADIDigitalOut expansion(EXPANSION_PORT);
 ADIDigitalOut indexer(INDEXER_PORT);
 
 Motor drive_bl(DRIVE_MOTOR_PORT_BL, pros::E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);

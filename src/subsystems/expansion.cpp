@@ -6,7 +6,7 @@ void expansion_task(void *parameter) {
 
     if (!competition::is_autonomous()) {
       if (controller.get_digital(DIGITAL_UP)) {
-        expansion_left.set_value(HIGH);
+        expansion.set_value(HIGH);
       }
     }
 
