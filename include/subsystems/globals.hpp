@@ -48,11 +48,14 @@
 #define ROLLER_POS -1400
 
 #define INTAKE_PORT 7
-#define INDEXER_PORT 8
+
+extern ADIDigitalOut indexer;
+#define INDEXER_PORT 'G'
+#define INDEXER_ENGAGE_COOLDOWN 100
 
 //intake
 extern Motor intake;
-extern Motor indexer;
+// extern Motor indexer;
 extern Motor flywheel_front;
 extern Motor flywheel_back;
 
@@ -66,9 +69,8 @@ extern Motor flywheel_back;
 #define ENCODER_PORT_TR 'E'
 #define ENCODER_PORT_BR 'F'
 
-extern ADIDigitalOut expansion_left;
-#define EXPANSION_PISTON_L 'G'
-#define EXPANSION_PISTON_R 'H'
+extern ADIDigitalOut expansion;
+#define EXPANSION_PORT 'H'
 
 
 extern ADIEncoder odom_left;

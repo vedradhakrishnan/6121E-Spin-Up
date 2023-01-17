@@ -1,26 +1,47 @@
 #include "main.h"
 
+int last_engagement = INDEXER_ENGAGE_COOLDOWN;
+int burst_left = 0;
+
 void indexer_task(void *parameter) {
   while (true) {
-    // controller.set_text(1, 1, "LIFT: " + std::to_string((int)(bar_lift.get_position())));
 
     if (!competition::is_autonomous()) {
       indexer_control();
     }
 
+    last_engagement += 10;
     delay(10);
   }
 }
 
-void set_indexer(int voltage) {
-  indexer = voltage;
+void engage_indexer() {
+  if (last_engagement > INDEXER_ENGAGE_COOLDOWN) {
+    last_engagement = 0;
+  }
+}
+
+void burst_indexer() {
+  if (burst_left == 0 && last_engagement > INDEXER_ENGAGE_COOLDOWN) {
+    burst_left = 3;
+  }
 }
 
 void indexer_control() {
   if (controller.get_digital(DIGITAL_A)) {
-    set_indexer(INDEXER_POWER);
+    engage_indexer();
   } else if(controller.get_digital(DIGITAL_B)) {
-    set_indexer(INDEXER_REV_POWER);
-  } else
-    set_indexer(0);
+    burst_indexer();
+  }
+
+  if (last_engagement < INDEXER_ENGAGE_COOLDOWN) {
+    indexer.set_value(HIGH);
+  } else {
+    indexer.set_value(LOW);
+  }
+
+  if (burst_left > 0 && last_engagement > INDEXER_ENGAGE_COOLDOWN) {
+    engage_indexer();
+    burst_left--;
+  }
 }
