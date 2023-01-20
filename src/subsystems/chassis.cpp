@@ -1,4 +1,8 @@
+#include "chassis.hpp"
+#include "display/lv_core/lv_lang.h"
 #include "main.h"
+#include <cmath>
+#include <cstdlib>
 
 //ODOM VARS
 double chassis_x = 0.0;
@@ -13,16 +17,38 @@ double target_theta;
 double trans_error;
 double trans_sum;
 double trans_last;
+
 double rot_error;
 double rot_sum;
 double rot_last;
 
-
-
 int max_power;
 
+//Pid ==> slew function variables
+double last_right = 0.0;
+double last_left = 0.0;
+double pid_left;
+double pid_right;
+double tank_left;
+double tank_right;
+double slewed_right;
+double slewed_left;
+
+/* TENTATIVE FLOW
+auton: 2 drives, pid + brake
+control: tank drive + pid
+
+for slew: first check chassis mode
+if pid, then  use pid voltage as inp,
+if arcade, use some sort of output?
+
+or have slew function take 2 inputs--sorta jank
+
+always set right and left to slewed voltage no matter stage
+*/
+
 int brake_timer = 0;
-int chassis_mode = DRIVE_CONST;
+int chassis_mode = DRIVE_PID;
 
 //HELPERS
 double tracker_inches(int ticks) {
@@ -107,15 +133,15 @@ void odom_update_aps() {
 
 
 //constant drive algorithm
-void straight_const(double inches, int power) {
-  chassis_mode = DRIVE_CONST;
+// void straight_const(double inches, int power) {
+//   chassis_mode = DRIVE_CONST;
 
-  target_x = chassis_x + inches * cos(chassis_theta);
-  target_z = chassis_z + inches * sin(chassis_theta);
-  target_theta = chassis_theta;
+//   target_x = chassis_x + inches * cos(chassis_theta);
+//   target_z = chassis_z + inches * sin(chassis_theta);
+//   target_theta = chassis_theta;
 
-  max_power = power;
-}
+//   max_power = power;
+// }
 
 //this sets the target that the robot must travel to (power represents the maximum voltage)
 void straight_pid(double inches, int power) {
@@ -137,15 +163,15 @@ void straight_pid(double inches, int power) {
   max_power = power;
 }
 
-void turn_const(double degrees, int power) {
-  chassis_mode = DRIVE_CONST;
+// void turn_const(double degrees, int power) {
+//   chassis_mode = DRIVE_CONST;
 
-  target_x = chassis_x;
-  target_z = chassis_z;
-  target_theta = chassis_theta + degrees * (M_PI / 180);
+//   target_x = chassis_x;
+//   target_z = chassis_z;
+//   target_theta = chassis_theta + degrees * (M_PI / 180);
 
-  max_power = power;
-}
+//   max_power = power;
+// }
 
 void drive_brake() {
 	chassis_mode = DRIVE_BRAKE;
@@ -162,7 +188,52 @@ void tank_drive() {
   lcd::set_text(4, "left: " + std::to_string(left_stick));
   lcd::set_text(5, "right: " + std::to_string(right_stick));
 
-  set_chassis(left_stick, right_stick);
+  // set_chassis(left_stick, right_stick);
+  tank_left = left_stick;
+  tank_right = right_stick;
+}
+
+
+void slew_power() {
+  double left_in;
+  double right_in;
+  if (chassis_mode == DRIVE_PID) {
+    left_in = pid_left;
+    right_in = pid_right;
+  } else if (chassis_mode == DRIVE_TANK) {
+    left_in = tank_left;
+    right_in = tank_right;
+  } else if (chassis_mode == DRIVE_BRAKE) {
+    left_in = 0;
+    right_in = 0;
+  }
+
+  //left side
+  int v_dir_left = last_left != 0 ? sgn(last_left) : sgn(left_in);
+  int a_dir_left = last_left != left_in ? v_dir_left * sgn(left_in - last_left) : 0;
+
+  int left_limit = a_dir_left >= 0 ? MAX_ACCEL_SLEW : MAX_DECEL_SLEW;
+  double delta_left = v_dir_left * (fabs(left_in - last_left) < left_limit ? fabs(left_in - last_left) : left_limit);
+
+  slewed_left = last_left + delta_left;
+  if (fabs(slewed_left) > max_power) 
+    slewed_left = v_dir_left * max_power;
+
+  //right side
+  int v_dir_right = last_right != 0 ? sgn(last_right) : sgn(right_in);
+  int a_dir_right = last_right != right_in ? v_dir_right * sgn(right_in - last_right) : 0;
+
+  int right_limit = a_dir_right >= 0 ? MAX_ACCEL_SLEW : MAX_DECEL_SLEW;
+  double delta_right = v_dir_right *  (fabs(right_in - last_right) < right_limit ? fabs(right_in - last_right) : right_limit);
+
+  slewed_right = last_right + delta_right;
+  if (fabs(slewed_right) > max_power)
+    slewed_right = v_dir_right * max_power;
+  
+}
+
+int sgn(int num) {
+  return abs(num) / num;
 }
 
 //concerned with setting the voltage during the autonomous based on the error that the robot has relative to the target. updates the voltage every cycle
@@ -171,8 +242,6 @@ void chassis_auton() {
   // odom_update();
 	// controller.set_text(1, 0, "X: " + std::to_string(chassis_x) + " Z: " + std::to_string(chassis_z));
   // controller.set_text(1, 1, "theta: " + std::to_string(chassis_theta));
-
-
 
 
   if (chassis_mode == DRIVE_PID) {
@@ -205,7 +274,9 @@ void chassis_auton() {
 
     lcd::set_text(6, "trans: " + std::to_string(trans_error));
     lcd::set_text(7, "rot: " + std::to_string(rot_error));
-    set_chassis(power + turn, power - turn);
+    // set_chassis(power + turn, power - turn);
+    pid_left = power + turn;
+    pid_right = power - turn;
 
     trans_last = trans_error;
     trans_sum += trans_error;
@@ -217,26 +288,29 @@ void chassis_auton() {
 void chassis_task(void *parameter) {
   int time = 0;
   while (true) {
-    odom_update_aps(); //put only in auton later
+    odom_update_aps();
+
     if (!competition::is_autonomous()) {
       tank_drive();
     } else {
-      time += 10;
       //odom_update();
       chassis_auton();
-
       // display time elapsed, odom coords, and PID vars
-
-
     }
+
+    slew_power();
+    set_chassis(slewed_left, slewed_right);
+    last_left = slewed_left;
+    last_right = slewed_right;
+
     lcd::set_text_color(255, 0, 0);
     lcd::set_text(0, "TIME: " + std::to_string(time));
-
-    lcd::set_text_color(0, 0, 255);
+    // lcd::set_text_color(0, 0, 255);
     lcd::set_text(1, "X: " + std::to_string(int(100 * chassis_x) / 100.0));
     lcd::set_text(2, "Z: " + std::to_string(int(100 * chassis_z) / 100.0));
     lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
 
+    time += 10;
     delay(10);
   }
 }

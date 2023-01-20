@@ -22,7 +22,11 @@
 
 #define DRIVE_BRAKE 1
 #define DRIVE_PID 2
-#define DRIVE_CONST 3
+#define DRIVE_TANK 3
+// #define DRIVE_CONST 3
+
+#define MAX_ACCEL_SLEW 10
+#define MAX_DECEL_SLEW 256
 
 #define MAX_STRAIGHT 110
 #define MAX_TURN 80
