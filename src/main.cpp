@@ -2,6 +2,8 @@
 //main file where the autonomous routines and the driver control functions are called.
 
 #include "main.h"
+#include "pros/motors.h"
+#include "subsystems/globals.hpp"
 
 void on_center_button() {
 	static bool pressed = false;
@@ -17,6 +19,9 @@ void initialize() {
 	pros::lcd::initialize();
 
 	chassis_unlock();
+	flywheel_back.set_brake_mode(E_MOTOR_BRAKE_COAST);
+	flywheel_front.set_brake_mode(E_MOTOR_BRAKE_COAST);
+
 	controller.set_text(1, 0, "Project: Discus");
 
 	pros::lcd::register_btn1_cb(on_center_button);
