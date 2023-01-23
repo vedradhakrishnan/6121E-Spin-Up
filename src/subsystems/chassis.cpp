@@ -156,7 +156,8 @@ void straight_pid(double inches, int power) {
 
   trans_error = sqrt(pow(x_error, 2) + pow(z_error, 2));
   trans_last = trans_error;
-  rot_error = target_theta - chassis_theta;  trans_sum = 0;
+  rot_error = target_theta - chassis_theta;  
+  trans_sum = 0;
   rot_sum = 0;
   rot_last = rot_error;
 
@@ -232,8 +233,8 @@ void slew_power() {
   
 }
 
-int sgn(int num) {
-  return abs(num) / num;
+int sgn(double num) {
+  return num < 0 ? -1 : 1;
 }
 
 //concerned with setting the voltage during the autonomous based on the error that the robot has relative to the target. updates the voltage every cycle
@@ -249,6 +250,9 @@ void chassis_auton() {
     double z_error = target_z - chassis_z;
     trans_error = sqrt(pow(x_error, 2) + pow(z_error, 2));
     rot_error = target_theta - chassis_theta;
+
+    double dot_product = x_error * cos(chassis_theta) + z_error * sin(chassis_theta);
+    int trans_dir = sgn(dot_product);
 
     double turn;
     double power;
@@ -275,8 +279,8 @@ void chassis_auton() {
     lcd::set_text(6, "trans: " + std::to_string(trans_error));
     lcd::set_text(7, "rot: " + std::to_string(rot_error));
     // set_chassis(power + turn, power - turn);
-    pid_left = power + turn;
-    pid_right = power - turn;
+    pid_left = trans_dir * power + turn;
+    pid_right = trans_dir * power - turn;
 
     trans_last = trans_error;
     trans_sum += trans_error;
