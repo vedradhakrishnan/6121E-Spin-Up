@@ -64,6 +64,8 @@ extern ADIDigitalOut indexer;
 
 //intake
 extern Motor intake;
+extern Motor roller;
+
 // extern Motor indexer;
 extern Motor flywheel_front;
 extern Motor flywheel_back;

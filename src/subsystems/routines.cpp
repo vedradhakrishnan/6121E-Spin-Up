@@ -1,6 +1,6 @@
 #include "main.h"
 
-void roller() {
+void rollers() {
   straight_pid(9, 127);
   intake.move_relative(-1200, ROLLER_POWER);
   delay(1600);
@@ -8,7 +8,7 @@ void roller() {
 }
 
 void red_left_roller() {
-  roller();
+  rollers();
   delay(1600);
 
   straight_pid(-18, 127);
