@@ -14,7 +14,7 @@ void turn_const(double degrees, int power);
 void straight_pid(double inches, int power);
 
 void slew_power();
-int sgn(int num);
+int sgn(double num);
 
 void tank_drive();
 

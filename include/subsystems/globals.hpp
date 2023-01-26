@@ -42,8 +42,8 @@
 #define INDEXER_POWER 95
 #define INDEXER_REV_POWER -100
 
-#define FLYWHEEL_PORT_FRONT 5
-#define FLYWHEEL_PORT_BACK 6
+#define FLYWHEEL_PORT_FRONT 12
+#define FLYWHEEL_PORT_BACK 11
 
 //flywheel
 
@@ -55,7 +55,8 @@
 #define ROLLER_POWER 127
 #define ROLLER_POS -1400
 
-#define INTAKE_PORT 7
+#define INTAKE_PORT 10
+#define ROLLER_PORT 13
 
 extern ADIDigitalOut indexer;
 #define INDEXER_PORT 'G'
@@ -86,8 +87,8 @@ extern ADIEncoder odom_center;
 extern ADIEncoder odom_right;
 
 //defining the V5 ports on the brain
-#define DRIVE_MOTOR_PORT_BL 1
-#define DRIVE_MOTOR_PORT_BR 2
+#define DRIVE_MOTOR_PORT_BL 5
+#define DRIVE_MOTOR_PORT_BR 6
 #define DRIVE_MOTOR_PORT_FL 3
 #define DRIVE_MOTOR_PORT_FR 4
 
