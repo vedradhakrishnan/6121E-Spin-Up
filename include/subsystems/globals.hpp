@@ -7,6 +7,9 @@
 #define TRACKING_WIDTH 5.75
 // #define
 // #define
+#define AUTON_TIME 15000
+#define CONTROL_TIME 105000
+#define EXPANSION_TIME 10000
 
 
 //chassis constants
