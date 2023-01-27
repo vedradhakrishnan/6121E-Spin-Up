@@ -219,7 +219,7 @@ void slew_power() {
   int a_dir_left = last_left != left_in ? v_dir_left * sgn(left_in - last_left) : 0;
 
   int left_limit = a_dir_left >= 0 ? MAX_ACCEL_SLEW : MAX_DECEL_SLEW;
-  double delta_left = v_dir_left * (fabs(left_in - last_left) < left_limit ? fabs(left_in - last_left) : left_limit);
+  double delta_left = a_dir_left * v_dir_left * (fabs(left_in - last_left) < left_limit ? fabs(left_in - last_left) : left_limit);
 
   slewed_left = last_left + delta_left;
   if (fabs(slewed_left) > max_power) 
