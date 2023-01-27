@@ -121,7 +121,7 @@ void odom_update_aps() {
     local_r = local_z;
     local_theta = M_PI_2;
   } else {
-    local_r = (fabs(local_x) / local_x) * sqrt(local_x * local_x + local_z * local_z); //Distance formula to convert para to polar, times signum of localX
+    local_r = sgn(local_x) * sqrt(local_x * local_x + local_z * local_z); //Distance formula to convert para to polar, times signum of localX
     local_theta = atan(local_z / local_x);
   }
   local_theta -= average_theta;
