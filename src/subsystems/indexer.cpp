@@ -1,6 +1,6 @@
 #include "main.h"
 
-int last_engagement = INDEXER_ENGAGE_COOLDOWN;
+int last_engagement = 0;
 int burst_left = 0;
 
 void indexer_task(void *parameter) {
@@ -17,7 +17,7 @@ void indexer_task(void *parameter) {
 
 void engage_indexer() {
   if (last_engagement > INDEXER_ENGAGE_COOLDOWN) {
-    last_engagement = 0;
+    last_engagement = -INDEXER_ENGAGE_TIME;
   }
 }
 
@@ -34,7 +34,7 @@ void indexer_control() {
     burst_indexer();
   }
 
-  if (last_engagement < INDEXER_ENGAGE_COOLDOWN) {
+  if (last_engagement < 0) {
     indexer.set_value(HIGH);
   } else {
     indexer.set_value(LOW);

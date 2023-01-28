@@ -13,13 +13,13 @@
 
 
 //chassis constants
-#define STRAIGHT_KP 2.0
+#define STRAIGHT_KP 3.25
 #define STRAIGHT_KI 0.0
-#define STRAIGHT_KD 0.0
+#define STRAIGHT_KD 0.5
 
 #define TURN_KP 5.0
 #define TURN_KI 0.0
-#define TURN_KD 0.0
+#define TURN_KD 0.5
 
 #define BRAKE_TIME 40
 
@@ -35,10 +35,12 @@
 #define MAX_TURN 80
 
 #define MIN_TURN 0.25
+#define MIN_ROT_ERROR 0.25
+#define MIN_TRANS_ERROR 1
 
 //Flywheel constants
-#define FLYWHEEL_POWER_HIGH 110
-#define FLYWHEEL_POWER_LOW 100
+#define FLYWHEEL_POWER_HIGH 127
+#define FLYWHEEL_POWER_LOW 105
 #define INDEXER_POWER 95
 #define INDEXER_REV_POWER -100
 
@@ -56,11 +58,13 @@
 #define ROLLER_POS -1400
 
 #define INTAKE_PORT 10
-#define ROLLER_PORT 13
+#define ROLLER_PORT 20
 
 extern ADIDigitalOut indexer;
 #define INDEXER_PORT 'G'
-#define INDEXER_ENGAGE_COOLDOWN 100
+#define INDEXER_ENGAGE_COOLDOWN 400
+#define INDEXER_ENGAGE_TIME 100
+
 
 //intake
 extern Motor intake;

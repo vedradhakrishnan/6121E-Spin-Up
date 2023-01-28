@@ -147,8 +147,8 @@ void odom_update_aps() {
 void straight_pid(double inches, int power) {
   chassis_mode = DRIVE_PID;
 
-  target_x = chassis_x + inches * cos(chassis_theta);
-  target_z = chassis_z + inches * sin(chassis_theta);
+  target_x = chassis_x + inches * sin(chassis_theta);
+  target_z = chassis_z + inches * cos(chassis_theta);
   target_theta = chassis_theta;
 
   double x_error = target_x - chassis_x;
@@ -204,7 +204,7 @@ void slew_power() {
   } else if (chassis_mode == DRIVE_TANK) {
     left_in = tank_left;
     right_in = tank_right;
-    max_power = 67;
+    max_power = 127;
   } else if (chassis_mode == DRIVE_BRAKE) {
     left_in = 0;
     right_in = 0;
@@ -234,8 +234,8 @@ void slew_power() {
 
   slewed_right = last_right + delta_right;
 
-  lcd::set_text(6, "sleft: " + std::to_string(slewed_right));
-  lcd::set_text(7, "sright: " + std::to_string(slewed_left));
+  // lcd::set_text(6, "sleft: " + std::to_string(slewed_right));
+  // lcd::set_text(7, "sright: " + std::to_string(slewed_left));
 
   if (fabs(slewed_right) > max_power)
     slewed_right = sgn(slewed_right) * max_power;
@@ -295,7 +295,14 @@ void chassis_auton() {
     trans_sum += trans_error;
     rot_last = rot_error;
     rot_sum += rot_error;
+
+    if (fabs(trans_error) < MIN_TRANS_ERROR && fabs(rot_error) < MIN_ROT_ERROR) {
+      drive_brake();
+    }
+  } else if (chassis_mode == DRIVE_BRAKE) {
+    brake_timer += 10;
   }
+
 }
 
 void chassis_task(void *parameter) {

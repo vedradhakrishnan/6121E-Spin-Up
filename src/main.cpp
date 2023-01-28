@@ -4,6 +4,7 @@
 #include "main.h"
 #include "pros/motors.h"
 #include "subsystems/globals.hpp"
+#include "subsystems/routines.hpp"
 
 void on_center_button() {
 	static bool pressed = false;
@@ -43,9 +44,9 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-	red_left_roller();
+	// red_left_roller();
 	// right_roller();
-
+	test_routine();
 }
 
 void opcontrol() {
