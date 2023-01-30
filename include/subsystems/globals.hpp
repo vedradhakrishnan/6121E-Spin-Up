@@ -13,13 +13,17 @@
 
 
 //chassis constants
-#define STRAIGHT_KP 15.25
+#define STRAIGHT_KP 13.25
 #define STRAIGHT_KI 0.0
 #define STRAIGHT_KD -7.5
 
-#define TURN_KP 50.0
+#define SLANT_KP 60.0
+#define SLANT_KI 0.0
+#define SLANT_KD -12.5
+
+#define TURN_KP 100.0
 #define TURN_KI 0.0
-#define TURN_KD 0.5
+#define TURN_KD -25
 
 #define BRAKE_TIME 40
 
@@ -52,7 +56,7 @@
 //need to extern the motors for the front and the back flywheels
 
 //defining the power and the ports for the intake
-#define INTAKE_POWER 100
+#define INTAKE_POWER 97
 #define OUTTAKE_POWER -97
 #define ROLLER_POWER 127
 #define ROLLER_POS -1400
