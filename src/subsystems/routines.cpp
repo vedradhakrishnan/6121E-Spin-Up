@@ -24,8 +24,15 @@ void blue_left_roller() {
 }
 
 void test_routine() {
-  straight_pid(8, 50);
-  delay(10000);
+  straight_pid(8, 100);
+  delay(3000);
   // turn_const(90, 70);
-  straight_pid(-10, 50);
+  turn_pid(-45, 100);
+
+  delay(3000);
+
+  straight_pid(-8, 100);
+  delay(3000);
+  // turn_const(90, 70);
+  straight_pid(-10, 100);
 }

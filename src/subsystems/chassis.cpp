@@ -164,15 +164,25 @@ void straight_pid(double inches, int power) {
   max_power = power;
 }
 
-// void turn_const(double degrees, int power) {
-//   chassis_mode = DRIVE_CONST;
+void turn_pid(double degrees, int power) {
+  chassis_mode = DRIVE_PID;
 
-//   target_x = chassis_x;
-//   target_z = chassis_z;
-//   target_theta = chassis_theta + degrees * (M_PI / 180);
+  target_x = chassis_x;
+  target_z = chassis_z;
+  target_theta = chassis_theta + degrees * (M_PI / 180);
 
-//   max_power = power;
-// }
+  double x_error = target_x - chassis_x;
+  double z_error = target_z - chassis_z;
+
+  trans_error = sqrt(pow(x_error, 2) + pow(z_error, 2));
+  trans_last = trans_error;
+  rot_error = target_theta - chassis_theta;  
+  trans_sum = 0;
+  rot_sum = 0;
+  rot_last = rot_error;
+
+  max_power = power;
+}
 
 void drive_brake() {
 	chassis_mode = DRIVE_BRAKE;
@@ -190,8 +200,8 @@ void tank_drive() {
   // lcd::set_text(5, "right: " + std::to_string(right_stick));
 
   // set_chassis(left_stick, right_stick);
-  tank_left = left_stick;
-  tank_right = right_stick;
+  tank_left = -right_stick;
+  tank_right = -left_stick;
 }
 
 
@@ -259,7 +269,7 @@ void chassis_auton() {
     trans_error = sqrt(pow(x_error, 2) + pow(z_error, 2));
     rot_error = target_theta - chassis_theta;
 
-    double dot_product = x_error * cos(chassis_theta) + z_error * sin(chassis_theta);
+    double dot_product = x_error * sin(chassis_theta) + z_error * cos(chassis_theta);
     int trans_dir = sgn(dot_product);
 
     double turn;

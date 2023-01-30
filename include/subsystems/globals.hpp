@@ -13,11 +13,11 @@
 
 
 //chassis constants
-#define STRAIGHT_KP 3.25
+#define STRAIGHT_KP 15.25
 #define STRAIGHT_KI 0.0
-#define STRAIGHT_KD 0.5
+#define STRAIGHT_KD -7.5
 
-#define TURN_KP 5.0
+#define TURN_KP 50.0
 #define TURN_KI 0.0
 #define TURN_KD 0.5
 
@@ -35,12 +35,12 @@
 #define MAX_TURN 80
 
 #define MIN_TURN 0.25
-#define MIN_ROT_ERROR 0.25
-#define MIN_TRANS_ERROR 1
+#define MIN_ROT_ERROR 0.02
+#define MIN_TRANS_ERROR 0.05
 
 //Flywheel constants
-#define FLYWHEEL_POWER_HIGH 127
-#define FLYWHEEL_POWER_LOW 105
+#define FLYWHEEL_POWER_HIGH 110
+#define FLYWHEEL_POWER_LOW 95
 #define INDEXER_POWER 95
 #define INDEXER_REV_POWER -100
 
@@ -52,8 +52,8 @@
 //need to extern the motors for the front and the back flywheels
 
 //defining the power and the ports for the intake
-#define INTAKE_POWER 127
-#define OUTTAKE_POWER -90
+#define INTAKE_POWER 100
+#define OUTTAKE_POWER -97
 #define ROLLER_POWER 127
 #define ROLLER_POS -1400
 
