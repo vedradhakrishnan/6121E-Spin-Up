@@ -8,6 +8,8 @@ void indexer_task(void *parameter) {
 
     if (!competition::is_autonomous()) {
       indexer_control();
+    } else {
+      indexer_control();
     }
 
     last_engagement += 10;

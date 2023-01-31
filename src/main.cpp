@@ -46,7 +46,8 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-	// red_left_roller();
+	// blue_left_roller();
+	// red_right_disc();
 	// right_roller();
 	test_routine();
 }

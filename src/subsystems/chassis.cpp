@@ -277,18 +277,18 @@ void chassis_auton() {
     if (fabs(rot_error) < MIN_TURN) {
       double p_turn = SLANT_KP * rot_error;
       double i_turn = SLANT_KI * rot_sum;
-      double d_turn = SLANT_KD * trans_dir * (rot_error - rot_last);
+      double d_turn = SLANT_KD * sgn(rot_error) * (rot_error - rot_last);
       turn = p_turn + i_turn + d_turn;
 
       double p_power = STRAIGHT_KP * trans_error;
       double i_power = STRAIGHT_KI * trans_sum;
-      double d_power = STRAIGHT_KD * (trans_error - trans_last);
+      double d_power = STRAIGHT_KD * trans_dir * (trans_error - trans_last);
       power = p_power + i_power + d_power;
 
     } else {
       double p_turn = TURN_KP * rot_error;
       double i_turn = TURN_KI * rot_sum;
-      double d_turn = TURN_KD * (rot_error - rot_last);
+      double d_turn = TURN_KD * sgn(rot_error) * (rot_error - rot_last);
       
       turn = p_turn + i_turn + d_turn;
 

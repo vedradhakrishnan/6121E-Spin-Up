@@ -23,7 +23,7 @@
 
 #define TURN_KP 100.0
 #define TURN_KI 0.0
-#define TURN_KD -25
+#define TURN_KD -200.0
 
 #define BRAKE_TIME 40
 
