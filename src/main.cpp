@@ -16,6 +16,8 @@ void on_center_button() {
 	}
 }
 
+
+//starts when program is run
 void initialize() {
 	pros::lcd::initialize();
 
