@@ -23,11 +23,46 @@ void red_left_roller() {
 }
 
 void blue_left_roller() {
-  straight_pid(9, 30);
-  intake.move_relative(-1200, ROLLER_POWER);
+  straight_pid(6, 30);
+  intake.move_relative(-300, ROLLER_POWER);
   delay(1500);
 
-  straight_pid(-12, 80);
+  straight_pid(-2.5, 80);
+  delay(1500);
+
+  turn_pid(-22.5, 120);
+  set_flywheel(120);//MAGIC NUM
+  delay(1000);
+
+  // turn_pid(35, 80);
+  delay(2000);
+
+  engage_indexer();
+  delay(3000);
+  engage_indexer();
+  delay(200);
+  set_flywheel(LOW);//MAGIC NUM
+
+}
+
+void red_right_compound() {
+  straight_pid(12, 70);
+  delay(1500);
+
+  toggle_intake();
+  straight_pid(12, 70);
+  delay(1500);
+
+  toggle_intake();
+  turn_pid(90, 80);
+  delay(1500);
+
+  straight_pid(24, 70);
+  delay(2000);
+  turn_pid(90, 80);
+  delay(1500);
+
+
 
 }
 
@@ -64,16 +99,17 @@ void red_right_disc() {
 }
 
 void test_routine() {
-  // turn_pid(45, 80);
-  // delay(1500);
-  // turn_pid(-45, 80);
-  // delay(1500);
-  // turn_pid(-90, 80);
-  // delay(2000);
-  // turn_pid(90, 80);
-  // delay(2000);
-  // turn_pid(180, 80);
-  // delay(3500);
-  // turn_pid(-360, 80);
-  turn_pid(-1800, 70);
+  turn_pid(45, 80);
+  delay(1500);
+  turn_pid(-45, 80);
+  delay(1500);
+  turn_pid(-90, 80);
+  delay(2000);
+  turn_pid(90, 80);
+  delay(2000);
+  turn_pid(180, 80);
+  delay(3500);
+  turn_pid(-360, 80);
+
+  // turn_pid(-1800, 70);
 }

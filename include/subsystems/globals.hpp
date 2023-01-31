@@ -21,9 +21,9 @@
 #define SLANT_KI 0.0
 #define SLANT_KD -12.5
 
-#define TURN_KP 100.0
+#define TURN_KP 150.0
 #define TURN_KI 0.0
-#define TURN_KD -200.0
+#define TURN_KD -2.0
 
 #define BRAKE_TIME 40
 
@@ -45,6 +45,7 @@
 //Flywheel constants
 #define FLYWHEEL_POWER_HIGH 110
 #define FLYWHEEL_POWER_LOW 95
+#define FLYWHEEL_GAIN 0.5
 #define INDEXER_POWER 95
 #define INDEXER_REV_POWER -100
 

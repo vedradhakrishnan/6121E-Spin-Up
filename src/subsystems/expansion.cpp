@@ -9,11 +9,11 @@ void expansion_task(void *parameter) {
 
     if (!competition::is_autonomous()) {
       if (controller.get_digital(DIGITAL_UP)) {
-        if (driver_time > CONTROL_TIME - EXPANSION_TIME) {
-          expansion.set_value(HIGH);
-          delay(INDEXER_ENGAGE_TIME);
-          expansion.set_value(LOW);
-        }
+        // if (driver_time > CONTROL_TIME - EXPANSION_TIME) {
+        expansion.set_value(HIGH);
+        delay(INDEXER_ENGAGE_TIME);
+        expansion.set_value(LOW);
+        // }
         // expansion.set_value(driver_time > CONTROL_TIME - EXPANSION_TIME);
       }
 

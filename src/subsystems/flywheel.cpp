@@ -1,5 +1,13 @@
 #include "main.h"
 
+// double flywheel_target_power = 0;
+// double flywheel_tbh;
+// double flywheel_output;
+// double flywheel_prev_error;
+
+
+
+
 void flywheel_task(void *parameter) {
   while (true) {
     // controller.set_text(1, 1, "LIFT: " + std::to_string((int)(bar_lift.get_position())));
