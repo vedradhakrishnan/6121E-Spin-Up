@@ -31,7 +31,7 @@ void blue_left_roller() {
   delay(1500);
 
   turn_pid(-22.5, 120);
-  set_flywheel(120);//MAGIC NUM
+  set_flywheel(121);//MAGIC NUM
   delay(1000);
 
   // turn_pid(35, 80);
