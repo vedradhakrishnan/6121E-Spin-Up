@@ -43,7 +43,7 @@ void left_roller_and_disc() {
   delay(200);
   set_flywheel(LOW);//MAGIC NUM
   turn_pid(-110, 110);
-  delay(1800);
+  delay(1400);
   straight_pid(30, 127);
 
   delay(1200);
@@ -63,13 +63,12 @@ void left_roller_and_disc() {
 
 
 void right_roller_and_disc() {
+  set_flywheel(116);
   straight_pid(-30, 110);
-  delay(1000);
-
-
-  turn_pid(19, 80);
+  delay(1500);
+  turn_pid(21, 80);
   delay(800);
-  set_flywheel(118);
+  set_flywheel(115);
   delay(3000);
   engage_indexer();
   delay(3000);
