@@ -31,14 +31,14 @@ void left_roller_and_disc() {
   delay(1200);
 
   turn_pid(-21.5, 120);
-  set_flywheel(121.4);//MAGIC NUM
+  set_flywheel(121.6);//MAGIC NUM
   delay(1000);
 
   // turn_pid(35, 80);
   delay(2000);
 
   engage_indexer();
-  delay(1500);
+  delay(2500);
   engage_indexer();
   delay(200);
   set_flywheel(LOW);//MAGIC NUM
@@ -51,8 +51,8 @@ void left_roller_and_disc() {
   toggle_intake();
   straight_pid(20, 60);
   delay(2000);
-  turn_pid(78, 120);
-  set_flywheel(120);
+  turn_pid(83, 120);
+  set_flywheel(116);
   delay(2100);
   engage_indexer();
   
