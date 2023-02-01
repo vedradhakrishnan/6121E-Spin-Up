@@ -63,19 +63,34 @@ void left_roller_and_disc() {
 
 
 void right_roller_and_disc() {
-  straight_pid(12, 70);
-  delay(1500);
+  straight_pid(-30, 110);
+  delay(1000);
 
-  toggle_intake();
-  straight_pid(12, 70);
-  delay(1500);
 
-  toggle_intake();
-  straight_pid(12, 70);
-  
+  turn_pid(19, 80);
+  delay(800);
+  set_flywheel(118);
+  delay(3000);
+  engage_indexer();
+  delay(3000);
+  engage_indexer();
 }
 
 
+
+
+
+
+
+
 void test_routine() {
-  
+  straight_pid(12, 70);
+  delay(1500);
+
+  toggle_intake();
+  straight_pid(12, 70);
+  delay(1500);
+
+  toggle_intake();
+  straight_pid(12, 70);
 }
