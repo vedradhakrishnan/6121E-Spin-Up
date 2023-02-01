@@ -21,7 +21,7 @@
 #define SLANT_KI 0.0
 #define SLANT_KD -12.5
 
-#define TURN_KP 150.0
+#define TURN_KP 200.0
 #define TURN_KI 0.0
 #define TURN_KD -2.0
 

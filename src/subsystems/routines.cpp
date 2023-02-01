@@ -63,15 +63,15 @@ void left_roller_and_disc() {
 
 
 void right_roller_and_disc() {
-  set_flywheel(116);
+  set_flywheel(112);
   straight_pid(-30, 110);
   delay(1500);
-  turn_pid(21, 80);
-  delay(800);
-  set_flywheel(115);
-  delay(3000);
+  turn_pid(18, 80);
+  delay(1000);
+  // set_flywheel(115);
+  // delay(3000);
   engage_indexer();
-  delay(3000);
+  delay(700);
   engage_indexer();
 }
 
