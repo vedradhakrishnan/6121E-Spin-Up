@@ -72,40 +72,10 @@ void right_roller_and_disc() {
 
   toggle_intake();
   straight_pid(12, 70);
-  delay(1500);
-
-  turn_pid(105, 80);
-  delay(1000);
-
-  set_flywheel(114);//MAGIC NUM
-  delay(1000);
-
-  turn_pid(100, 80);
-  delay(2000);
-
-  engage_indexer();
-  delay(1500);
-  engage_indexer();
-  delay(1500);
-  engage_indexer();
-  delay(200);
-  set_flywheel(LOW);//MAGIC NUM
-
-
+  
 }
 
-void test_routine() {
-  turn_pid(45, 80);
-  delay(1500);
-  turn_pid(-45, 80);
-  delay(1500);
-  turn_pid(-90, 80);
-  delay(2000);
-  turn_pid(90, 80);
-  delay(2000);
-  turn_pid(180, 80);
-  delay(3500);
-  turn_pid(-360, 80);
 
-  // turn_pid(-1800, 70);
+void test_routine() {
+  
 }
