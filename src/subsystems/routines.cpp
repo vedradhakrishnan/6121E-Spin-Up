@@ -65,12 +65,12 @@ void left_roller_and_disc() {
 void right_roller_and_disc() {
   
   toggle_intake();
-  straight_pid(30, 75);
+  straight_pid(30, 60);
   delay(2000);
   set_flywheel(113);
   delay(200);
 
-  turn_pid(-155, 80);
+  turn_pid(-157, 80);
   delay(800);
 
   toggle_intake();
@@ -83,15 +83,15 @@ void right_roller_and_disc() {
   delay(600);
   set_flywheel(LOW);
 
-  turn_pid(-55, 90);
+  turn_pid(-50, 90);
   delay(800);
-  straight_pid(39, 115);
+  straight_pid(39, 120);
   delay(3000);
   turn_pid(42, 120);
   delay(600);
-  straight_pid(7, 110);
+  straight_pid(7, 120);
   delay(700);
-  intake.move_relative(-600, ROLLER_POWER);
+  intake.move_relative(-300, ROLLER_POWER);
 }
 
 
