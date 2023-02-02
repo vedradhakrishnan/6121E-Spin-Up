@@ -13,7 +13,7 @@
 
 
 //chassis constants
-#define STRAIGHT_KP 13.25
+#define STRAIGHT_KP 8.625 //original value 13.25
 #define STRAIGHT_KI 0.0
 #define STRAIGHT_KD -7.5
 
