@@ -24,36 +24,39 @@ void left_roller() {
 
 void left_roller_and_disc() {
   straight_pid(6, 30);
-  intake.move_relative(-300, ROLLER_POWER);
-  delay(800);
+  set_flywheel(119);//MAGIC NUM
+  delay(100);
+  set_intake(-127);
+  delay(110);
 
-  straight_pid(-2.5, 80);
+  set_intake(0);
+  straight_pid(-5, 80);
   delay(1200);
 
-  turn_pid(-21.5, 120);
-  set_flywheel(121.6);//MAGIC NUM
-  delay(1000);
+  turn_pid(-18, 80);
+  delay(1500);
 
   // turn_pid(35, 80);
-  delay(2000);
+  // delay(2000);
 
   engage_indexer();
-  delay(2500);
+  delay(2000);
   engage_indexer();
   delay(200);
-  set_flywheel(LOW);//MAGIC NUM
-  turn_pid(-110, 110);
+  // set_flywheel(LOW);//MAGIC NUM
+  turn_pid(-105, 80);
   delay(1400);
-  straight_pid(30, 127);
+  straight_pid(30, 90);
 
-  delay(1200);
-
-  toggle_intake();
+  delay(1500);
+// adi was here :d
+  set_intake(80);
   straight_pid(20, 60);
   delay(2000);
-  turn_pid(83, 120);
+  turn_pid(75, 80);
   set_flywheel(116);
   delay(2100);
+  set_intake(0);
   engage_indexer();
   
   
