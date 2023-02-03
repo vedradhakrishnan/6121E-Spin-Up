@@ -67,11 +67,11 @@ void right_roller_and_disc() {
   // toggle_intake();
   set_intake(80);
   straight_pid(30, 65);
-  delay(2000);
-  set_flywheel(112);
+  set_flywheel(113);
+  delay(2400);
   delay(200);
 
-  turn_pid(-155, 80);
+  turn_pid(-158, 80);
   delay(700);
   // straight_pid(-2, 60);
   delay(100);
@@ -92,7 +92,7 @@ void right_roller_and_disc() {
 
   turn_pid(-57, 80);
   delay(770);
-  straight_pid(39, 100);
+  straight_pid(41, 100);
   delay(2800);
   turn_pid(41, 80);
   delay(600);

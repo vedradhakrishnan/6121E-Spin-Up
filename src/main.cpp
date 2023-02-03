@@ -24,7 +24,8 @@ void initialize() {
 	chassis_unlock();
 	flywheel_back.set_brake_mode(E_MOTOR_BRAKE_COAST);
 	flywheel_front.set_brake_mode(E_MOTOR_BRAKE_COAST);
-	// expansion.set_value(LOW);
+	expansion.set_value(LOW);
+	
 
 	controller.set_text(1, 0, "Project: Discus");
 
