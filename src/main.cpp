@@ -47,8 +47,8 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-	left_roller_and_disc();
-	// right_roller_and_disc();
+	//left_roller_and_disc();
+	right_roller_and_disc();
 }
 
 void opcontrol() {

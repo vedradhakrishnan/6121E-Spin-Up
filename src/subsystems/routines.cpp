@@ -24,7 +24,7 @@ void left_roller() {
 
 void left_roller_and_disc() {
   straight_pid(6, 30);
-  set_flywheel(119);//MAGIC NUM
+  set_flywheel(120);//MAGIC NUM
   delay(100);
   set_intake(-127);
   delay(110);
@@ -33,7 +33,7 @@ void left_roller_and_disc() {
   straight_pid(-5, 80);
   delay(1200);
 
-  turn_pid(-18, 80);
+  turn_pid(-20, 80);
   delay(1500);
 
   // turn_pid(35, 80);
@@ -43,16 +43,17 @@ void left_roller_and_disc() {
   delay(2000);
   engage_indexer();
   delay(200);
-  // set_flywheel(LOW);//MAGIC NUM
-  turn_pid(-105, 80);
+  set_flywheel(LOW);//MAGIC NUM
+  turn_pid(-102, 80);
   delay(1400);
-  straight_pid(30, 90);
+  straight_pid(30, 127);
 
-  delay(1500);
-// adi was here :d
-  set_intake(80);
-  straight_pid(20, 60);
-  delay(2000);
+  delay(1000);
+
+  set_intake(INTAKE_POWER);
+  straight_pid(20, 35);
+  delay(2600);
+  set_flywheel(120);
   turn_pid(75, 80);
   set_flywheel(116);
   delay(2100);
@@ -68,21 +69,22 @@ void left_roller_and_disc() {
 void right_roller_and_disc() {
   
   // toggle_intake();
-  set_intake(80);
+  set_intake(INTAKE_POWER);
   straight_pid(30, 65);
-  set_flywheel(113);
-  delay(2400);
-  delay(200);
+  delay(2700);
+  set_flywheel(115);
+  
+  
 
-  turn_pid(-158, 80);
-  delay(700);
+  turn_pid(-154, 80);
+  
   // straight_pid(-2, 60);
-  delay(100);
+  
 
   // toggle_intake();
   set_intake(0);
 
-  delay(1000);
+  delay(3400);
   engage_indexer();
   delay(1500);
   engage_indexer();
