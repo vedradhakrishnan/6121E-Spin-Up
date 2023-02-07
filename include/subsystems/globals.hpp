@@ -57,7 +57,7 @@
 //need to extern the motors for the front and the back flywheels
 
 //defining the power and the ports for the intake
-#define INTAKE_POWER 97
+#define INTAKE_POWER 100
 #define OUTTAKE_POWER -97
 #define ROLLER_POWER 127
 #define ROLLER_POS -1400

@@ -49,6 +49,7 @@ void competition_initialize() {}
 void autonomous() {
 	//left_roller_and_disc();
 	right_roller_and_disc();
+	//test_routine();
 }
 
 void opcontrol() {

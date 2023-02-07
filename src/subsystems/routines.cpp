@@ -72,11 +72,11 @@ void right_roller_and_disc() {
   set_intake(INTAKE_POWER);
   straight_pid(30, 65);
   delay(2700);
-  set_flywheel(115);
+  set_flywheel(114);
   
   
 
-  turn_pid(-154, 80);
+  turn_pid(-151, 80);
   
   // straight_pid(-2, 60);
   
@@ -98,14 +98,14 @@ void right_roller_and_disc() {
   turn_pid(-57, 80);
   delay(770);
   straight_pid(41, 100);
-  delay(2800);
+  delay(3000);
   turn_pid(41, 80);
   delay(600);
   straight_pid(7, 120);
   delay(400);
   // intake.move_relative(-300, ROLLER_POWER);
   set_intake(-127);
-  delay(130);
+  delay(100);
   set_intake(0);
   straight_pid(-2, 70);
 }
