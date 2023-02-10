@@ -111,24 +111,30 @@ void imu_update_aps() {
   double delta_theta = (left - right) / CHASSIS_WIDTH;
   double arc_r = 0.5 * (left + right) / delta_theta;
 
-
-  double local_x; double local_z;
-  local_x = -arc_r * cos(delta_theta) * sin(delta_theta);
-  local_z = -arc_r * sin(delta_theta) * sin(delta_theta);
-  
-  lcd::set_text(1, "X: " + std::to_string(int(100 * local_x) / 100.0));
-  lcd::set_text(2, "Z: " + std::to_string((100 * local_z)));
-  lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
-
   double local_r; double local_theta;
-  if (local_x == 0) {
-    local_r = local_z;
-    local_theta = M_PI_2;
-  } else {
-    local_r = sgn(local_x) * sqrt(local_x * local_x + local_z * local_z); //Distance formula to convert para to polar, times signum of localX
-    local_theta = atan(local_z / local_x);
-  }
+  local_theta = 0.5 * delta_theta;
+  local_r = 2 * arc_r * sin(local_theta);
   local_theta -= chassis_theta;
+
+  // double local_x; double local_z;
+  // local_x = -arc_r * cos(delta_theta) * sin(delta_theta);
+  // local_z = -arc_r * sin(delta_theta) * sin(delta_theta);
+
+  
+  // // lcd::set_text(1, "X: " + std::to_string(int(100 * local_x) / 100.0));
+  // // lcd::set_text(2, "Z: " + std::to_string((100 * local_z)));
+  // // lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+
+  // double local_r; double local_theta;
+  // // local_r = -arc_r * sin(delta_theta);
+  // if (local_x == 0) {
+  //   local_r = local_z;
+  //   local_theta = M_PI_2;
+  // } else {
+  //   local_r = sgn(local_x) * sqrt(local_x * local_x + local_z * local_z); //Distance formula to convert para to polar, times signum of localX
+  //   local_theta = atan(local_z / local_x);
+  // }
+  // local_theta -= chassis_theta;
 
   chassis_x += local_r * cos(local_theta);
   chassis_z += local_r * sin(local_theta);
