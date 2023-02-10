@@ -75,7 +75,7 @@ bin/subsystems/globals.cpp.o: src/subsystems/globals.cpp include/main.h \
  include/pros/rotation.hpp include/pros/rotation.h include/pros/rtos.hpp \
  include/pros/rtos.h include/pros/screen.hpp include/pros/screen.h \
  include/pros/vision.hpp include/pros/vision.h include/pros/link.hpp \
- include/pros/link.h include/subsystems/globals.hpp \
+ include/pros/link.h include/subsystems/globals.hpp include/pros/imu.hpp \
  include/subsystems/chassis.hpp include/subsystems/indexer.hpp \
  include/subsystems/flywheel.hpp include/subsystems/intake.hpp \
  include/subsystems/routines.hpp include/subsystems/expansion.hpp
@@ -231,6 +231,7 @@ include/pros/vision.h:
 include/pros/link.hpp:
 include/pros/link.h:
 include/subsystems/globals.hpp:
+include/pros/imu.hpp:
 include/subsystems/chassis.hpp:
 include/subsystems/indexer.hpp:
 include/subsystems/flywheel.hpp:

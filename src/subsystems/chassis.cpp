@@ -1,5 +1,6 @@
 #include "chassis.hpp"
 #include "display/lv_core/lv_lang.h"
+#include "globals.hpp"
 #include "main.h"
 #include <cmath>
 #include <cstdlib>
@@ -61,6 +62,7 @@ void initialize_aps(double x_i, double z_i, double theta_i) {
   chassis_theta = theta_i;
 }
 
+
 void chassis_lock() {
   drive_bl.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   // drive_lc.set_brake_mode(E_MOTOR_BRAKE_HOLD);
@@ -89,6 +91,48 @@ void set_chassis(int left, int right) {
   drive_br = right;
   // drive_lc = left;
   drive_fr = right;
+}
+
+double encoder_inches(int ticks) {
+  return ticks * (M_PI / 450.0) * 3.25;
+}
+
+void imu_update_aps() {
+
+
+  double left = encoder_inches(drive_bl.get_position() + drive_fl.get_position()) / 2.0;
+  drive_bl.tare_position();
+  drive_fl.tare_position();
+
+  double right = encoder_inches(drive_br.get_position() + drive_fl.get_position()) / 2.0;
+  drive_br.tare_position();
+  drive_fr.tare_position();
+  
+  double delta_theta = (left - right) / CHASSIS_WIDTH;
+  double arc_r = 0.5 * (left + right) / delta_theta;
+
+
+  double local_x; double local_z;
+  local_x = -arc_r * cos(delta_theta) * sin(delta_theta);
+  local_z = -arc_r * sin(delta_theta) * sin(delta_theta);
+  
+  lcd::set_text(1, "X: " + std::to_string(int(100 * local_x) / 100.0));
+  lcd::set_text(2, "Z: " + std::to_string((100 * local_z)));
+  lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+
+  double local_r; double local_theta;
+  if (local_x == 0) {
+    local_r = local_z;
+    local_theta = M_PI_2;
+  } else {
+    local_r = sgn(local_x) * sqrt(local_x * local_x + local_z * local_z); //Distance formula to convert para to polar, times signum of localX
+    local_theta = atan(local_z / local_x);
+  }
+  local_theta -= chassis_theta;
+
+  chassis_x += local_r * cos(local_theta);
+  chassis_z += local_r * sin(local_theta);
+  chassis_theta = (imu1.get_heading() + imu2.get_heading()) * (M_PI / 360.0);  
 }
 
 void odom_update_aps() {
@@ -320,6 +364,7 @@ void chassis_task(void *parameter) {
 
   while (true) {
     odom_update_aps();
+    // imu_update_aps();
 
     if (!competition::is_autonomous()) {
       chassis_mode = DRIVE_TANK; //comment out later
@@ -339,9 +384,9 @@ void chassis_task(void *parameter) {
     lcd::set_text_color(255, 0, 0);
     lcd::set_text(0, "TIME: " + std::to_string(time));
     // lcd::set_text_color(0, 0, 255);
-    lcd::set_text(1, "X: " + std::to_string(int(100 * chassis_x) / 100.0));
-    lcd::set_text(2, "Z: " + std::to_string(int(100 * chassis_z) / 100.0));
-    lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+    // lcd::set_text(1, "X: " + std::to_string(int(100 * chassis_x) / 100.0));
+    // lcd::set_text(2, "Z: " + std::to_string(int(100 * chassis_z) / 100.0));
+    // lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
 
     time += 10;
     delay(10);

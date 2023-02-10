@@ -1,5 +1,6 @@
 #pragma once
 #include "main.h"
+#include "pros/imu.hpp"
 
 //bot constants
 #define CHASSIS_WIDTH 12.20
@@ -52,6 +53,8 @@
 #define FLYWHEEL_PORT_FRONT 12
 #define FLYWHEEL_PORT_BACK 11
 
+#define IMU_PORT_1 13
+#define IMU_PORT_2 14
 //flywheel
 
 //need to extern the motors for the front and the back flywheels
@@ -109,6 +112,10 @@ extern Motor drive_bl;
 extern Motor drive_br;
 extern Motor drive_fl;
 extern Motor drive_fr;
+
+//Sensors
+extern Imu imu1;
+extern Imu imu2;
 
 
 //Controller

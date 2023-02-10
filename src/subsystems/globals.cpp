@@ -1,4 +1,5 @@
 #include "main.h"
+#include "pros/imu.hpp"
 
 ADIEncoder odom_left(ENCODER_PORT_TL, ENCODER_PORT_BL, false);
 ADIEncoder odom_center(ENCODER_PORT_TC, ENCODER_PORT_BC, false);
@@ -19,6 +20,9 @@ Motor roller(ROLLER_PORT, pros::E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_COUNT
 Motor flywheel_front(FLYWHEEL_PORT_FRONT, pros::E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_COUNTS);
 Motor flywheel_back(FLYWHEEL_PORT_BACK, pros::E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_COUNTS);
 
+//sensors
+Imu imu1(IMU_PORT_1);
+Imu imu2(IMU_PORT_2);
 
 //need to defined the externed motors for the flywheel
 

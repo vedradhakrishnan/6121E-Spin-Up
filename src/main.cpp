@@ -22,6 +22,8 @@ void initialize() {
 	pros::lcd::initialize();
 
 	chassis_unlock();
+	imu1.tare();
+	imu2.tare();
 	flywheel_back.set_brake_mode(E_MOTOR_BRAKE_COAST);
 	flywheel_front.set_brake_mode(E_MOTOR_BRAKE_COAST);
 	expansion.set_value(LOW);
