@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "pros/motors.h"
+#include "pros/rtos.hpp"
 #include "subsystems/globals.hpp"
 #include "subsystems/routines.hpp"
 
@@ -51,7 +52,7 @@ void competition_initialize() {}
 void autonomous() {
 	//left_roller_and_disc();
 	right_roller_and_disc();
-	//test_routine();
+	// test_routine();
 }
 
 void opcontrol() {

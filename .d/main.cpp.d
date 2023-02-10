@@ -77,7 +77,8 @@ bin/main.cpp.o: src/main.cpp include/main.h include/api.h \
  include/pros/link.h include/subsystems/globals.hpp include/pros/imu.hpp \
  include/subsystems/chassis.hpp include/subsystems/indexer.hpp \
  include/subsystems/flywheel.hpp include/subsystems/intake.hpp \
- include/subsystems/routines.hpp include/subsystems/expansion.hpp
+ include/subsystems/routines.hpp include/subsystems/expansion.hpp \
+ include/pros/rtos.hpp
 include/main.h:
 include/api.h:
 include/pros/adi.h:
@@ -237,3 +238,4 @@ include/subsystems/flywheel.hpp:
 include/subsystems/intake.hpp:
 include/subsystems/routines.hpp:
 include/subsystems/expansion.hpp:
+include/pros/rtos.hpp:

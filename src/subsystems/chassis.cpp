@@ -10,6 +10,11 @@ double chassis_x = 0.0;
 double chassis_z = 0.0;
 double chassis_theta = 0.0;
 
+double last_imu1 = 0.0;
+double last_imu2 = 0.0;
+double new_imu1 = 0.0;
+double new_imu2 = 0.0;
+
 double target_x;
 double target_z;
 double target_theta;
@@ -97,6 +102,71 @@ double encoder_inches(int ticks) {
   return ticks * (M_PI / 450.0) * 3.25;
 }
 
+void gyrodom_update_aps() {
+  double left = tracker_inches(odom_left.get_value());
+  odom_left.reset();
+
+  double right = tracker_inches(odom_right.get_value());
+  odom_right.reset();
+
+  double center = tracker_inches(odom_center.get_value());
+  odom_center.reset();
+
+  double delta_theta = (left - right) / TRACKING_WIDTH;
+  double average_theta = chassis_theta + (delta_theta / 2);
+  // chassis_theta += delta_theta;
+
+  double local_x; double local_z;
+  if (delta_theta == 0.0) {
+    local_x = center;
+    local_z = right;
+  } else {
+    local_x = 2 * sin(delta_theta / 2) * ((center / delta_theta) + TRACKING_WIDTH / 2);
+    local_z = 2 * sin(delta_theta / 2) * ((right / delta_theta) + TRACKING_WIDTH / 2);
+  }
+
+  double local_r; double local_theta;
+  if (local_x == 0) {
+    local_r = local_z;
+    local_theta = M_PI_2;
+  } else {
+    local_r = sgn(local_x) * sqrt(local_x * local_x + local_z * local_z); //Distance formula to convert para to polar, times signum of localX
+    local_theta = atan(local_z / local_x);
+  }
+  local_theta -= average_theta;
+
+  //UPDATE CHASSIS POSITION
+  chassis_x += local_r * cos(local_theta);
+  chassis_z += local_r * sin(local_theta);
+
+  if (!imu1.is_calibrating() && !imu2.is_calibrating()) {
+    new_imu1 = imu1.get_heading() * (M_PI / 180);
+    new_imu2 = imu2.get_heading() * (M_PI / 180);
+
+    double delta_imu1 = new_imu1 - last_imu1;
+    double delta_imu2 = new_imu2 - last_imu2;
+
+    if (delta_imu1 > M_PI)
+      delta_imu1 -= 2 * M_PI;
+    else if (delta_imu1 < -M_PI)
+      delta_imu1 += 2 * M_PI;
+
+    if (delta_imu2 > M_PI)
+      delta_imu2 -= 2 * M_PI;
+    else if (delta_imu2 < -M_PI)
+      delta_imu2 += 2 * M_PI;
+
+    // lcd::set_text(1, "X: " + std::to_string(int(100 * delta_imu1) / 100.0));
+    // lcd::set_text(2, "Z: " + std::to_string(int(100 * new_imu1) / 100.0));
+    // lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+
+    chassis_theta += 0.5 * (delta_imu1 + delta_imu2);
+    last_imu1 = new_imu1;
+    last_imu2 = new_imu2; 
+  }
+
+}
+
 void imu_update_aps() {
 
 
@@ -108,22 +178,22 @@ void imu_update_aps() {
   drive_br.tare_position();
   drive_fr.tare_position();
   
-  double delta_theta = (left - right) / CHASSIS_WIDTH;
-  double arc_r = 0.5 * (left + right) / delta_theta;
+  // double delta_theta = (left - right) / CHASSIS_WIDTH;
+  // double arc_r = 0.5 * (left + right) / delta_theta;
 
-  double local_r; double local_theta;
-  local_theta = 0.5 * delta_theta;
-  local_r = 2 * arc_r * sin(local_theta);
-  local_theta -= chassis_theta;
+  // double local_r; double local_theta;
+  // local_theta = 0.5 * delta_theta;
+  // local_r = 2 * arc_r * sin(local_theta);
+  // local_theta -= chassis_theta;
 
   // double local_x; double local_z;
   // local_x = -arc_r * cos(delta_theta) * sin(delta_theta);
   // local_z = -arc_r * sin(delta_theta) * sin(delta_theta);
 
   
-  // // lcd::set_text(1, "X: " + std::to_string(int(100 * local_x) / 100.0));
-  // // lcd::set_text(2, "Z: " + std::to_string((100 * local_z)));
-  // // lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+  // lcd::set_text(1, "X: " + std::to_string(int(100 * local_r) / 100.0));
+  // lcd::set_text(2, "Z: " + std::to_string((100 * delta_theta)));
+  // lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
 
   // double local_r; double local_theta;
   // // local_r = -arc_r * sin(delta_theta);
@@ -135,10 +205,55 @@ void imu_update_aps() {
   //   local_theta = atan(local_z / local_x);
   // }
   // local_theta -= chassis_theta;
+  //chassis_x = chassis_x + local_r * cos(local_theta);
+  double delta_theta = (left - right) / CHASSIS_WIDTH;
+  if (delta_theta != 0.0) {
+    double arc_r = 0.5 * (left + right) / delta_theta;
 
-  chassis_x += local_r * cos(local_theta);
-  chassis_z += local_r * sin(local_theta);
-  chassis_theta = (imu1.get_heading() + imu2.get_heading()) * (M_PI / 360.0);  
+    double local_r; double local_theta;
+    local_theta = 0.5 * delta_theta;
+    local_r = 2 * arc_r * sin(local_theta);
+    local_theta -= chassis_theta;
+
+    chassis_x += local_r * cos(local_theta);
+    chassis_z += local_r * sin(local_theta);
+    // lcd::set_text(1, "X: " + std::to_string(chassis_x));
+    // lcd::set_text(2, "Z: " + std::to_string(local_r * cos(local_theta)));
+    // lcd::set_text(3, "theta: " + std::to_string(arc_r));
+  }
+
+
+
+  //ok
+  if (imu1.is_calibrating() || imu2.is_calibrating())
+    // chassis_theta = (imu1.get_heading() + imu2.get_heading()) * (M_PI / 360.0);
+    chassis_theta = 0.0;
+  else {
+    new_imu1 = imu1.get_heading() * (M_PI / 180);
+    new_imu2 = imu2.get_heading() * (M_PI / 180);
+
+    double delta_imu1 = new_imu1 - last_imu1;
+    double delta_imu2 = new_imu2 - last_imu2;
+
+    if (delta_imu1 > M_PI)
+      delta_imu1 -= 2 * M_PI;
+    else if (delta_imu1 < -M_PI)
+      delta_imu1 += 2 * M_PI;
+
+    if (delta_imu2 > M_PI)
+      delta_imu2 -= 2 * M_PI;
+    else if (delta_imu2 < -M_PI)
+      delta_imu2 += 2 * M_PI;
+
+    // lcd::set_text(1, "X: " + std::to_string(int(100 * delta_imu1) / 100.0));
+    // lcd::set_text(2, "Z: " + std::to_string(int(100 * new_imu1) / 100.0));
+    // lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+
+    chassis_theta += 0.5 * (delta_imu1 + delta_imu2);
+    last_imu1 = new_imu1;
+    last_imu2 = new_imu2; 
+  }
+
 }
 
 void odom_update_aps() {
@@ -179,6 +294,9 @@ void odom_update_aps() {
   //UPDATE CHASSIS POSITION
   chassis_x += local_r * cos(local_theta);
   chassis_z += local_r * sin(local_theta);
+
+
+  
 }
 
 
@@ -348,8 +466,8 @@ void chassis_auton() {
     lcd::set_text(6, "trans: " + std::to_string(trans_error));
     lcd::set_text(7, "rot: " + std::to_string(rot_error));
     // set_chassis(power + turn, power - turn);
-    pid_left = trans_dir * power + turn;
-    pid_right = trans_dir * power - turn;
+    pid_left = (trans_dir * power + turn);
+    pid_right = (trans_dir * power - turn);
 
     trans_last = trans_error;
     trans_sum += trans_error;
@@ -369,8 +487,10 @@ void chassis_task(void *parameter) {
   int time = 0;
 
   while (true) {
-    odom_update_aps();
+    // odom_update_aps();
     // imu_update_aps();
+    gyrodom_update_aps();
+
 
     if (!competition::is_autonomous()) {
       chassis_mode = DRIVE_TANK; //comment out later
@@ -389,10 +509,11 @@ void chassis_task(void *parameter) {
 
     lcd::set_text_color(255, 0, 0);
     lcd::set_text(0, "TIME: " + std::to_string(time));
-    // lcd::set_text_color(0, 0, 255);
-    // lcd::set_text(1, "X: " + std::to_string(int(100 * chassis_x) / 100.0));
-    // lcd::set_text(2, "Z: " + std::to_string(int(100 * chassis_z) / 100.0));
-    // lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+    // // lcd::set_text_color(0, 0, 255);
+    lcd::set_text(1, "X: " + std::to_string(int(100 * chassis_x) / 100.0));
+    lcd::set_text(2, "Z: " + std::to_string(int(100 * chassis_z) / 100.0));
+    lcd::set_text(3, "theta: " + std::to_string(int(180 * chassis_theta / M_PI)));
+    // lcd::set_text(3, "theta: " + std::to_string(chassis_theta));
 
     time += 10;
     delay(10);
