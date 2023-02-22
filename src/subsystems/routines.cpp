@@ -73,16 +73,16 @@ void left_roller_and_disc() {
 void right_roller_and_disc() {
   
   // toggle_intake();
-  set_intake(INTAKE_POWER + 5);
+  set_intake(INTAKE_POWER + 2);
   straight_pid(30, 65);
   delay(1000);
   delay(1200);
-  set_flywheel(116);
+  set_flywheel(112);
 
   
   
 
-  turn_pid(-157, 80);
+  turn_pid(-161, 70);
   
   // straight_pid(-2, 60);
   
@@ -90,27 +90,27 @@ void right_roller_and_disc() {
   // toggle_intake();
   set_intake(0);
 
-  delay(3100);
+  delay(2800);
   engage_indexer();
-  set_flywheel(117);
+  set_flywheel(113);
 
-  delay(1500);
+  delay(1800);
   engage_indexer();
-  delay(1500);
+  delay(1600);
   // straight_pid(2, 60);
   engage_indexer();
   delay(200);
   set_flywheel(LOW);
   delay(200);
 
-  turn_pid(-67, 80);
+  turn_pid(-65, 80);
   delay(770);
   straight_pid(37, 100);
   delay(2000);
-  turn_pid(45, 80);
+  turn_pid(48, 80);
   delay(600);
-  straight_pid(8, 120);
-  delay(600);
+  straight_pid(13, 120);
+  delay(550);
   // intake.move_relative(-300, ROLLER_POWER);
   set_intake(-127);
   delay(130);
