@@ -1,4 +1,5 @@
 #pragma once
+
 #include "main.h"
 #include "pros/imu.hpp"
 
@@ -46,72 +47,78 @@
 //Flywheel constants
 #define FLYWHEEL_POWER_HIGH 100
 #define FLYWHEEL_POWER_LOW 95
+#define FLYWHEEL_VEL_HIGH 550
+#define FLYWHEEL_VEL_LOW 450
+
 #define FLYWHEEL_GAIN 0.5
 #define INDEXER_POWER 95
 #define INDEXER_REV_POWER -100
 
-#define FLYWHEEL_PORT_FRONT 12
-#define FLYWHEEL_PORT_BACK 11
+#define FLYWHEEL_PORT 9
+// #define FLYWHEEL_PORT_BACK 11
 
-#define IMU_PORT_1 13
-#define IMU_PORT_2 14
+#define IMU_PORT_1 4
+#define IMU_PORT_2 5
 //flywheel
 
 //need to extern the motors for the front and the back flywheels
 
 //defining the power and the ports for the intake
-#define INTAKE_POWER 108
+#define INTAKE_POWER 120
 #define OUTTAKE_POWER -97
 #define ROLLER_POWER 127
 #define ROLLER_POS -1400
 
-#define INTAKE_PORT 10
-#define ROLLER_PORT 20
+#define INTAKE_PORT 1
+// #define ROLLER_PORT 20
 
 extern ADIDigitalOut indexer;
-#define INDEXER_PORT 'G'
-#define INDEXER_ENGAGE_COOLDOWN 150
-#define INDEXER_ENGAGE_TIME 100
+#define INDEXER_PORT 'A'
+#define INDEXER_ENGAGE_COOLDOWN 180
+#define INDEXER_ENGAGE_TIME 50
 
 
 //intake
 extern Motor intake;
-extern Motor roller;
+// extern Motor roller;
 
 // extern Motor indexer;
-extern Motor flywheel_front;
-extern Motor flywheel_back;
+extern Motor flywheel;
+// extern Motor flywheel_back;
 
 
 //odom and chassis motor definition
 //defining the ADI ports for use with the encoders
-#define ENCODER_PORT_TL 'A'
-#define ENCODER_PORT_BL 'B'
-#define ENCODER_PORT_TC 'C'
-#define ENCODER_PORT_BC 'D'
-#define ENCODER_PORT_TR 'E'
-#define ENCODER_PORT_BR 'F'
+// #define ENCODER_PORT_TL 'A'
+// #define ENCODER_PORT_BL 'B'
+// #define ENCODER_PORT_TC 'C'
+// #define ENCODER_PORT_BC 'D'
+// #define ENCODER_PORT_TR 'E'
+// #define ENCODER_PORT_BR 'F'
+
+extern ADIDigitalOut tilter;
+#define TILTER_PORT 'B'
 
 extern ADIDigitalOut expansion;
-#define EXPANSION_PORT 'H'
+#define EXPANSION_PORT 'C'
 
 
-extern ADIEncoder odom_left;
-extern ADIEncoder odom_center;
-extern ADIEncoder odom_right;
+// extern ADIEncoder odom_left;
+// extern ADIEncoder odom_center;
+// extern ADIEncoder odom_right;
 
 //defining the V5 ports on the brain
-#define DRIVE_MOTOR_PORT_BL 5
-#define DRIVE_MOTOR_PORT_BR 6
-#define DRIVE_MOTOR_PORT_FL 1
-#define DRIVE_MOTOR_PORT_FR 4
+// #define DRIVE_MOTOR_PORT_BL 5
+// #define DRIVE_MOTOR_PORT_BR 6
+// #define DRIVE_MOTOR_PORT_FL 1
+// #define DRIVE_MOTOR_PORT_FR 4
 
 
 //drive
-extern Motor drive_bl;
-extern Motor drive_br;
-extern Motor drive_fl;
-extern Motor drive_fr;
+// extern Motor drive_bl;
+// extern Motor drive_br;
+// extern Motor drive_fl;
+// extern Motor drive_fr;
 
 //Sensors
 extern Imu imu1;

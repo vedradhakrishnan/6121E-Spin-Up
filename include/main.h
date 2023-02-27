@@ -1,10 +1,10 @@
 /**
- * file main.h
+ * \file main.h
  *
  * Contains common definitions and header files used throughout your PROS
  * project.
  *
- * Copyright (c) 2017-2022, Purdue University ACM SIGBots.
+ * Copyright (c) 2017-2021, Purdue University ACM SIGBots.
  * All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -35,21 +35,27 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-using namespace pros;
-using namespace pros::literals;
 
 /**
  * You should add more #includes here
  */
 //#include "okapi/api.hpp"
 //#include "pros/api_legacy.h"
+#include "EZ-Template/api.hpp"
+
+using namespace pros;
+
+// More includes here...
+#include "autons.hpp"
 #include "subsystems/globals.hpp"
-#include "subsystems/chassis.hpp"
+// #include "subsystems/chassis.hpp" //RIP...
 #include "subsystems/indexer.hpp"
 #include "subsystems/flywheel.hpp"
 #include "subsystems/intake.hpp"
-#include "subsystems/routines.hpp"
+// #include "subsystems/routines.hpp" //RIP... you will be missed
 #include "subsystems/expansion.hpp"
+#include "subsystems/tilter.hpp"
+#include "subsystems/driver.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
@@ -59,15 +65,16 @@ using namespace pros::literals;
  * concurrently! The okapi namespace will export all symbols inside the pros
  * namespace.
  */
-// using namespace pros;
 // using namespace pros::literals;
 // using namespace okapi;
+// using namespace ez;
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure
  * that they can be called from user code (i.e. calling autonomous from a
  * button press in opcontrol() for testing purposes).
  */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -16,7 +16,7 @@ void intake_task(void *parameter) {
 
 void set_intake(int voltage) {
   intake = voltage;
-  roller = voltage;
+  // roller = voltage;
 }
 
 void intake_control() {
