@@ -64,9 +64,14 @@ void modified_exit_condition() {
   // chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
   // chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
   // chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
-  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 100, 500);
+
+  // chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 100, 500);
+  // chassis.set_exit_condition(chassis.swing_exit, 0, 0, 0, 0, 0, 0);
+  // chassis.set_exit_condition(chassis.drive_exit, 100, 50, 300, 150, 100, 500);
+
+  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
   chassis.set_exit_condition(chassis.swing_exit, 0, 0, 0, 0, 0, 0);
-  chassis.set_exit_condition(chassis.drive_exit, 100, 50, 300, 150, 100, 500);
+  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 150, 150, 120, 500);
 }
 
 
