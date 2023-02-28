@@ -1,7 +1,11 @@
 #include "main.h"
 #include "pros/rtos.hpp"
 
-bool tilter_raised = HIGH;
+bool tilter_raised = LOW;
+
+void toggle_tilter() {
+  tilter_raised = !tilter_raised;
+}
 
 void tilter_task(void *parameter) {
   while (true) {

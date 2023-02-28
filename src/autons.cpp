@@ -1,5 +1,10 @@
+#include "autons.hpp"
 #include "main.h"
+#include "pros/rtos.hpp"
+#include "subsystems/flywheel.hpp"
+#include "subsystems/indexer.hpp"
 #include "subsystems/intake.hpp"
+#include "subsystems/tilter.hpp"
 
 
 /////
@@ -25,13 +30,13 @@ const int SWING_SPEED = 90;
 // If the objects are light or the cog doesn't change much, then there isn't a concern here.
 
 void default_constants() {
-  chassis.set_slew_min_power(20, 20);
-  chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.00350, 0, 0.0225, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.00350, 0, 0.0225, 0);
+  chassis.set_slew_min_power(80, 80);
+  chassis.set_slew_distance(3, 3);
+  chassis.set_pid_constants(&chassis.headingPID, 2.6, 0, 1, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.00380, 0.00008, 0.0305, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.00420, 0, 0.0325, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
-  chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
+  chassis.set_pid_constants(&chassis.swingPID, 3.6, 0, 0, 0);
 }
 
 void one_mogo_constants() {
@@ -46,7 +51,7 @@ void one_mogo_constants() {
 
 void two_mogo_constants() {
   chassis.set_slew_min_power(80, 80);
-  chassis.set_slew_distance(7, 7);
+  chassis.set_slew_distance(1, 1);
   chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
@@ -59,9 +64,9 @@ void modified_exit_condition() {
   // chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
   // chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
   // chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
-  chassis.set_exit_condition(chassis.turn_exit, 10, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.swing_exit, 10, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.drive_exit, 10, 50, 300, 150, 500, 500);
+  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 100, 500);
+  chassis.set_exit_condition(chassis.swing_exit, 0, 0, 0, 0, 0, 0);
+  chassis.set_exit_condition(chassis.drive_exit, 100, 50, 300, 150, 100, 500);
 }
 
 
@@ -80,19 +85,39 @@ void drive_example() {
 
   chassis.set_drive_pid(3, 20);
   delay(20);
-  set_intake(ROLLER_POWER);
-  delay(180);  
+  set_intake(-ROLLER_POWER);
+  delay(200);  
   set_intake(0);
 
-  chassis.set_drive_pid(-12, 100, true);
+  chassis.set_drive_pid(-10.5, 100, true);
   chassis.wait_drive();
+
   chassis.set_turn_pid(90, TURN_SPEED);
   chassis.wait_drive();
 
-  set_intake(INTAKE_POWER);
-  chassis.set_drive_pid(28, 70, true);
+  set_intake(110);
+  chassis.set_drive_pid(31, 50, true);
+  //chassis.wait_drive();
+  delay(2850);  
 
 
+  chassis.set_drive_pid(3, 20);
+  // set_intake(-ROLLER_POWER);
+  delay(250);  
+
+  chassis.set_drive_pid(-3, 100, true);
+  chassis.wait_drive();
+  set_flywheel(110);
+  chassis.set_turn_pid(0, TURN_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-55, 50, true);
+  chassis.wait_until(53);
+  for (int i = 0; i < 3; i++) {
+    delay(500);
+    engage_indexer();
+  }
+  chassis.wait_drive();
 }
 
 
@@ -101,18 +126,23 @@ void drive_example() {
 // Turn Example
 ///
 void turn_example() {
-  // The first parameter is target degrees
-  // The second parameter is max speed the robot will drive at
+  // tilter.set_value(HIGH);
+  // toggle_tilter();
+  set_flywheel(104);
+  // set_flywheel_velocity(500);
+  
+  delay(3000);
+  engage_indexer();
 
+  // set_flywheel_velocity(500);
+  set_flywheel(107);
+  delay(100);
+  for (int i = 0; i < 8; i++) {
+    delay(700);
+    engage_indexer();
+  }
+  set_flywheel_velocity(LOW);
 
-  chassis.set_turn_pid(90, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(45, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(0, TURN_SPEED);
-  chassis.wait_drive();
 }
 
 

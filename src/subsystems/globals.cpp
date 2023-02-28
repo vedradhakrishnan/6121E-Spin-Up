@@ -6,7 +6,7 @@
 // ADIEncoder odom_right(ENCODER_PORT_TR, ENCODER_PORT_BR, true);
 
 ADIDigitalOut expansion(EXPANSION_PORT, LOW);
-ADIDigitalOut tilter(TILTER_PORT, HIGH);
+ADIDigitalOut tilter(TILTER_PORT, LOW);
 
 ADIDigitalOut indexer(INDEXER_PORT);
 
@@ -15,7 +15,7 @@ ADIDigitalOut indexer(INDEXER_PORT);
 // Motor drive_fl(DRIVE_MOTOR_PORT_FL, pros::E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_COUNTS);
 // Motor drive_fr(DRIVE_MOTOR_PORT_FR, pros::E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
 
-Motor intake(INTAKE_PORT, pros::E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_COUNTS);
+Motor intake(INTAKE_PORT, pros::E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_COUNTS);
 
 // Motor indexer(INDEXER_PORT, pros::E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_COUNTS);
 Motor flywheel(FLYWHEEL_PORT, pros::E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_COUNTS);

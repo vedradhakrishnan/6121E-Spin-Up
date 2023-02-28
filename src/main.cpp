@@ -38,7 +38,7 @@ Drive chassis (
 
   // Right Tracking Wheel Ports (negative port will reverse it!)
   // ,{-3, -4} // 3 wire encoder
-  ,-13 // Rotation sensor
+  ,-14 // Rotation sensor
   
 
   // Uncomment if tracking wheels are plugged into a 3 wire expander
@@ -86,7 +86,7 @@ void initialize() {
   // ez::as::initialize();
 
   // Add tasks here
-  Task chassis(chassis_task);
+  // Task chassis(chassis_task);
 	Task flywheel(flywheel_task);
 	Task indexer(indexer_task);
 	Task intake(intake_task);
@@ -144,6 +144,7 @@ void autonomous() {
 
   // ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
   drive_example();
+  // turn_example();
 }
 
 
@@ -167,7 +168,29 @@ void opcontrol() {
 
   while (true) {
 
-    chassis.tank(); // Tank control
+    // chassis.tank(); // Tank control
+
+    int left_stick = controller.get_analog(E_CONTROLLER_ANALOG_LEFT_Y);
+    int right_stick = controller.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y);
+
+    if(abs(left_stick) < 10) left_stick = 0;
+    if(abs(right_stick) < 10) right_stick = 0;
+
+    // lcd::set_text(4, "left: " + std::to_string(left_stick));
+    // lcd::set_text(5, "right: " + std::to_string(right_stick));
+
+    // set_chassis(left_stick, right_stick);
+    chassis.left_motors[0] = left_stick;
+    chassis.left_motors[1] = left_stick;
+    chassis.left_motors[2] = left_stick;
+
+    chassis.right_motors[0] = right_stick;
+    chassis.right_motors[1] = right_stick;
+    chassis.right_motors[2] = right_stick;
+
+    // tank_left = -right_stick;
+    // tank_right = -left_stick;
+
     // chassis.arcade_standardN(ez::SPLIT); // Standard split arcade
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade

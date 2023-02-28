@@ -20,9 +20,9 @@ void set_intake(int voltage) {
 }
 
 void intake_control() {
-  if (controller.get_digital(DIGITAL_R1)) {
+  if (controller.get_digital(DIGITAL_R2)) {
     set_intake(INTAKE_POWER);
-  } else if (controller.get_digital(DIGITAL_R2)) {
+  } else if (controller.get_digital(DIGITAL_R1)) {
     set_intake(OUTTAKE_POWER);
   } else
     set_intake(0);

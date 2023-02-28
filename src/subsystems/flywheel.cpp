@@ -28,10 +28,13 @@ void flywheel_task(void *parameter) {
 
     if (!competition::is_autonomous()) {
       flywheel_control();
+    } else {
+      set_flywheel_tbh();
+      // flywheel.move_velocity(flywheel_output);
     }
 
-    set_flywheel_tbh();
-    flywheel.move_velocity(flywheel_output);
+    // set_flywheel_tbh();
+    // flywheel.move_velocity(flywheel_output);
 
     delay(10);
     timer_f += 10;
