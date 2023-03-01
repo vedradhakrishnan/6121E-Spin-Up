@@ -65,7 +65,7 @@
 
 //defining the power and the ports for the intake
 #define INTAKE_POWER 118
-#define OUTTAKE_POWER -97
+#define OUTTAKE_POWER -127
 #define ROLLER_POWER 127
 #define ROLLER_POS -1400
 
