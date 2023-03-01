@@ -17,6 +17,7 @@ Drive chassis (
 
   // Wheel Diameter (Remember, 4" wheels are actually 4.125!)
   //    (or tracking wheel diameter)
+  // ,3.25
   ,2.75
 
   // Cartridge RPM
@@ -27,6 +28,7 @@ Drive chassis (
   //    (or gear ratio of tracking wheel)
   // eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
   // eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
+  // ,5.0/3.0
   ,1
 
 
@@ -143,8 +145,9 @@ void autonomous() {
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
   // ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
-  drive_example();
+  // drive_example();
   // turn_example();
+  drive_and_turn();
 }
 
 

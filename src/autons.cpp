@@ -32,9 +32,9 @@ const int SWING_SPEED = 90;
 void default_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(3, 3);
-  chassis.set_pid_constants(&chassis.headingPID, 2.6, 0, 1, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.00380, 0.00008, 0.0305, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.00420, 0, 0.0325, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 3.0, 0, 18.3, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.00250, 0.00004, 0.0305, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.00330, 0, 0.0325, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
   chassis.set_pid_constants(&chassis.swingPID, 3.6, 0, 0, 0);
 }
@@ -42,7 +42,7 @@ void default_constants() {
 void one_mogo_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 6, 0, 10, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
@@ -69,9 +69,9 @@ void modified_exit_condition() {
   // chassis.set_exit_condition(chassis.swing_exit, 0, 0, 0, 0, 0, 0);
   // chassis.set_exit_condition(chassis.drive_exit, 100, 50, 300, 150, 100, 500);
 
-  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.swing_exit, 0, 0, 0, 0, 0, 0);
-  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 150, 150, 120, 500);
+  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 80, 500);
+  chassis.set_exit_condition(chassis.swing_exit, 0, 0, 0, 0, 80, 0);
+  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 150, 150, 80, 500);
 }
 
 
@@ -85,7 +85,7 @@ void drive_example() {
   // The second parameter is max speed the robot will drive at
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
   // for slew, only enable it when the drive distance is greater then the slew distance + a few inches
-
+  // one_mogo_constants();
   modified_exit_condition();
 
   chassis.set_drive_pid(3, 20);
@@ -94,18 +94,19 @@ void drive_example() {
   delay(200);  
   set_intake(0);
 
-  chassis.set_drive_pid(-10.5, 100, true);
+  chassis.set_drive_pid(-10.5, 90, true);
   chassis.wait_drive();
 
   chassis.set_turn_pid(90, TURN_SPEED);
   chassis.wait_drive();
 
   set_intake(110);
-  chassis.set_drive_pid(31, 50, true);
+  chassis.set_drive_pid(31, 30, true);
   //chassis.wait_drive();
-  delay(2850);  
+  delay(3050);  
 
-
+  chassis.set_turn_pid(90, TURN_SPEED);
+  chassis.wait_drive();
   chassis.set_drive_pid(3, 20);
   // set_intake(-ROLLER_POWER);
   delay(250);  
@@ -117,12 +118,16 @@ void drive_example() {
   chassis.wait_drive();
 
   chassis.set_drive_pid(-55, 50, true);
-  chassis.wait_until(53);
+  // chassis.wait_until(53);
+  chassis.wait_drive();
+  chassis.set_turn_pid(0, TURN_SPEED);
+  chassis.wait_drive();
+
+
   for (int i = 0; i < 3; i++) {
     delay(500);
     engage_indexer();
   }
-  chassis.wait_drive();
 }
 
 
@@ -131,6 +136,8 @@ void drive_example() {
 // Turn Example
 ///
 void turn_example() {
+  modified_exit_condition();
+
   // tilter.set_value(HIGH);
   // toggle_tilter();
   set_flywheel(104);
@@ -147,7 +154,23 @@ void turn_example() {
     engage_indexer();
   }
   set_flywheel_velocity(LOW);
+  delay(700);
 
+
+  chassis.set_turn_pid(84, TURN_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(18.5, 90, true);
+  chassis.wait_until(17);
+  set_intake(120);
+  chassis.wait_drive();
+
+  delay(1000);
+  chassis.set_drive_pid(12.5, 20, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-10.5, 90, true);
+  chassis.wait_drive();
 }
 
 
@@ -156,20 +179,71 @@ void turn_example() {
 // Combining Turn + Drive
 ///
 void drive_and_turn() {
-  chassis.set_drive_pid(24, DRIVE_SPEED, true);
+  modified_exit_condition();
+
+ // tilter.set_value(HIGH);
+  // toggle_tilter();
+  set_flywheel(104);
+  // set_flywheel_velocity(500);
+  
+  delay(3000);
+  engage_indexer();
+
+  // set_flywheel_velocity(500);
+  set_flywheel(107);
+  delay(100);
+  for (int i = 0; i < 8; i++) {
+    delay(700);
+    engage_indexer();
+  }
+  set_flywheel_velocity(LOW);
+  delay(700);
+
+
+  chassis.set_angle(-10.25);
+
+  chassis.set_drive_pid(-10, 80, true);
   chassis.wait_drive();
 
-  chassis.set_turn_pid(45, TURN_SPEED);
+  chassis.set_turn_pid(24.5, TURN_SPEED);
   chassis.wait_drive();
-
-  chassis.set_turn_pid(-45, TURN_SPEED);
+  set_intake(110);
+  chassis.set_drive_pid(42.75, 80, true);
   chassis.wait_drive();
 
   chassis.set_turn_pid(0, TURN_SPEED);
   chassis.wait_drive();
-
-  chassis.set_drive_pid(-24, DRIVE_SPEED, true);
+  
+  chassis.set_drive_pid(15, 30, true);
   chassis.wait_drive();
+  chassis.set_turn_pid(0, TURN_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(11.8, 70, true);
+  chassis.wait_drive();
+  set_intake(0);
+  chassis.set_drive_pid(3, 30);
+  delay(20);
+  set_intake(-ROLLER_POWER);
+  delay(440);  
+  set_intake(0);
+  chassis.set_drive_pid(-26, 70, true);
+  chassis.wait_drive();
+  chassis.set_turn_pid(-90, TURN_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(12.25, 80, true);
+  chassis.wait_drive();
+  set_intake(0);
+  chassis.set_drive_pid(3, 40);
+  delay(20);
+  set_intake(-ROLLER_POWER);
+
+  delay(240);  
+  set_intake(0);
+  chassis.set_drive_pid(-10, 70, true);
+  chassis.wait_drive();
+
 }
 
 
