@@ -30,21 +30,21 @@ const int SWING_SPEED = 90;
 // If the objects are light or the cog doesn't change much, then there isn't a concern here.
 
 void default_constants() {
-  chassis.set_slew_min_power(80, 80);
+  chassis.set_slew_min_power(60, 60);
   chassis.set_slew_distance(3, 3);
-  chassis.set_pid_constants(&chassis.headingPID, 3.0, 0, 18.3, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.00250, 0.00004, 0.0305, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.00330, 0, 0.0325, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 12.5, 0, 21.3, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.00220, 0.00001, 0.036, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.0023, 0, 0.038, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
   chassis.set_pid_constants(&chassis.swingPID, 3.6, 0, 0, 0);
 }
 
 void one_mogo_constants() {
-  chassis.set_slew_min_power(80, 80);
+  chassis.set_slew_min_power(70, 70);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(&chassis.headingPID, 6, 0, 10, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 16, 0, 36, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.40, 0, 9.6, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.40, 0, 9.6, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
   chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
@@ -70,7 +70,7 @@ void modified_exit_condition() {
   // chassis.set_exit_condition(chassis.drive_exit, 100, 50, 300, 150, 100, 500);
 
   chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 80, 500);
-  chassis.set_exit_condition(chassis.swing_exit, 0, 0, 0, 0, 80, 0);
+  chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
   chassis.set_exit_condition(chassis.drive_exit, 80, 50, 150, 150, 80, 500);
 }
 
@@ -94,7 +94,7 @@ void drive_example() {
   delay(200);  
   set_intake(0);
 
-  chassis.set_drive_pid(-10.5, 90, true);
+  chassis.set_drive_pid(-10.5, DRIVE_SPEED, true);
   chassis.wait_drive();
 
   chassis.set_turn_pid(90, TURN_SPEED);
@@ -111,7 +111,7 @@ void drive_example() {
   // set_intake(-ROLLER_POWER);
   delay(250);  
 
-  chassis.set_drive_pid(-3, 100, true);
+  chassis.set_drive_pid(-3, DRIVE_SPEED, true);
   chassis.wait_drive();
   set_flywheel(110);
   chassis.set_turn_pid(0, TURN_SPEED);
@@ -157,7 +157,7 @@ void turn_example() {
   delay(700);
 
 
-  chassis.set_turn_pid(84, TURN_SPEED);
+  chassis.set_turn_pid(90, TURN_SPEED);
   chassis.wait_drive();
 
   chassis.set_drive_pid(18.5, 90, true);
@@ -180,92 +180,113 @@ void turn_example() {
 ///
 void drive_and_turn() {
   modified_exit_condition();
+  one_mogo_constants();
 
-  // sets the flywheel
- // tilter.set_value(HIGH);
-  // toggle_tilter();
-  set_flywheel(104);
-  // set_flywheel_velocity(500);
+
+  chassis.set_angle(-10.25);
+//   // sets the flywheel
+//  // tilter.set_value(HIGH);
+//   // toggle_tilter();
+//   set_flywheel(104);
+//   // set_flywheel_velocity(500);
   
-  //shoots the first set of match loads
+//   //shoots the first set of match loads
 
-  delay(3000);
-  engage_indexer();
+//   delay(3000);
+//   engage_indexer();
 
-  // set_flywheel_velocity(500);
-  set_flywheel(107);
-  delay(100);
-  for (int i = 0; i < 8; i++) {
-    delay(700);
-    engage_indexer();
-  }
-  set_flywheel_velocity(LOW);
+//   // set_flywheel_velocity(500);
+  // set_flywheel(107);
+//   delay(100);
+//   for (int i = 0; i < 8; i++) {
+//     delay(700);
+//     engage_indexer();
+//   }
+  set_flywheel(98);
   delay(700);
 
   //angles and drivesd forward
-  chassis.set_angle(-10.25);
 
-  chassis.set_drive_pid(-10, 80, true);
+  chassis.set_drive_pid(-11.25, DRIVE_SPEED, true);
   chassis.wait_drive();
 
   //turns and drives backwards
-  chassis.set_turn_pid(24.5, TURN_SPEED);
+  chassis.set_turn_pid(20, TURN_SPEED);
   chassis.wait_drive();
-  chassis.set_drive_pid(42.75, 80, true);
+  chassis.set_drive_pid(44, 70, true);
   chassis.wait_drive();
-  chassis.set_turn_pid(24.5, TURN_SPEED);
+  chassis.set_turn_pid(20, TURN_SPEED);
   chassis.wait_drive();
 
   //orients toward disc and intakes
-  set_intake(105);
+  set_intake(118);
   chassis.set_turn_pid(0, TURN_SPEED);
   chassis.wait_drive();
   
-  chassis.set_drive_pid(15, 30, true);
-  chassis.wait_drive();
-  chassis.set_turn_pid(0, TURN_SPEED);
-  chassis.wait_drive();
+  chassis.set_drive_pid(20.50, 10, true);
+  chassis.wait_until(17.5);
 
   //sets intake velocity and goes toward roller
+  chassis.set_max_speed(70);
+  chassis.wait_drive();
+
+  chassis.set_turn_pid(0, TURN_SPEED);
+  chassis.wait_drive();
   set_intake(0);
 
 
-  chassis.set_drive_pid(11.8, 70, true);
-  chassis.wait_drive();
+
+  // chassis.set_drive_pid(11.8, 70, true);
+  // chassis.wait_drive();
   
   chassis.set_drive_pid(4, 40, true);
   set_intake(-ROLLER_POWER);
   
-  delay(500);  
+  delay(250);  
   set_intake(0);
 
   //drives back from roller
-  chassis.set_drive_pid(-26, 80, true);
+  chassis.set_drive_pid(-12.5, DRIVE_SPEED, true);
   chassis.wait_drive();
 
   //turns toward other roller
-  chassis.set_turn_pid(-90, TURN_SPEED);
+  chassis.set_turn_pid(-86, TURN_SPEED);
   chassis.wait_drive();
 
   // set_intake(-ROLLER_POWER);
 
-  chassis.set_drive_pid(12.25, 80, true);
+  chassis.set_drive_pid(10.5, DRIVE_SPEED, true);
   chassis.wait_drive();
-  chassis.set_drive_pid(4, 40, true);
+  chassis.set_turn_pid(-88, TURN_SPEED);
+  chassis.wait_drive();
+  chassis.set_drive_pid(2, 10, true);
   set_intake(-ROLLER_POWER);
   
 
-  delay(500);  
+  delay(800);  
   set_intake(0);
-  chassis.set_drive_pid(-10, 100, true);
+  chassis.set_drive_pid(-10, DRIVE_SPEED, true);
   chassis.wait_drive();
+  chassis.set_turn_pid(-90, TURN_SPEED);
 
-  chassis.set_turn_pid(35, TURN_SPEED);
+  chassis.set_drive_pid(-42, 80, true);
   chassis.wait_drive();
+  
+  chassis.set_turn_pid(-86, TURN_SPEED);
+  chassis.set_angle(-90);
+  engage_indexer();
 
-  chassis.set_drive_pid(12, 80, true);
+  // chassis.set_turn_pid(35, TURN_SPEED);
   chassis.wait_drive();
-  chassis.set_turn_pid(90, TURN_SPEED);
+  // chassis.set_drive_pid(13, DRIVE_SPEED, true);
+  // chassis.wait_drive();
+  // chassis.set_turn_pid(135, TURN_SPEED);
+  // chassis.wait_drive();
+
+
+  // chassis.set_drive_pid(12, 80, true);
+  // chassis.wait_drive();
+  // chassis.set_turn_pid(90, TURN_SPEED);
 
 }
 
@@ -373,6 +394,7 @@ void tug (int attempts) {
 void interfered_example() {
  chassis.set_drive_pid(24, DRIVE_SPEED, true);
  chassis.wait_drive();
+//  chassis.set_swing_pid(e_swing type, double target, int speed)
 
  if (chassis.interfered) {
    tug(3);
