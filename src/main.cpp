@@ -147,9 +147,10 @@ void autonomous() {
   // ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
   // drive_example();
   // turn_example();
-  prog_skills();
-  // left_comp_auton();
-  // right_comp_auton();
+  // prog_skills();
+  left_comp_auton();
+  //right_comp_auton();
+
 }
 
 
