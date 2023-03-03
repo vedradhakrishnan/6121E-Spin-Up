@@ -1,6 +1,7 @@
 #include "autons.hpp"
 #include "main.h"
 #include "pros/rtos.hpp"
+#include "subsystems/driver.hpp"
 #include "subsystems/flywheel.hpp"
 #include "subsystems/indexer.hpp"
 #include "subsystems/intake.hpp"
@@ -50,11 +51,11 @@ void one_mogo_constants() {
 }
 
 void two_mogo_constants() {
-  chassis.set_slew_min_power(80, 80);
-  chassis.set_slew_distance(1, 1);
-  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 0.45, 0, 5, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 0.45, 0, 5, 0);
+  chassis.set_slew_min_power(70, 70);
+  chassis.set_slew_distance(7, 7);
+  chassis.set_pid_constants(&chassis.headingPID, 16, 0, 36, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 0.35, 0, 5.8, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 0.35, 0, 5.8, 0);
   chassis.set_pid_constants(&chassis.turnPID, 5, 0.003, 35, 15);
   chassis.set_pid_constants(&chassis.swingPID, 7, 0, 45, 0);
 }
@@ -81,97 +82,111 @@ void modified_exit_condition() {
 // Drive Example
 ///
 void drive_example() {
-  // The first parameter is target inches
-  // The second parameter is max speed the robot will drive at
-  // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
-  // for slew, only enable it when the drive distance is greater then the slew distance + a few inches
-  // one_mogo_constants();
-  modified_exit_condition();
-
-  chassis.set_drive_pid(3, 20);
-  delay(20);
-  set_intake(-ROLLER_POWER);
-  delay(200);  
-  set_intake(0);
-
-  chassis.set_drive_pid(-10.5, DRIVE_SPEED, true);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(90, TURN_SPEED);
-  chassis.wait_drive();
-
-  set_intake(110);
-  chassis.set_drive_pid(31, 30, true);
-  //chassis.wait_drive();
-  delay(3050);  
-
-  chassis.set_turn_pid(90, TURN_SPEED);
-  chassis.wait_drive();
-  chassis.set_drive_pid(3, 20);
-  // set_intake(-ROLLER_POWER);
-  delay(250);  
-
-  chassis.set_drive_pid(-3, DRIVE_SPEED, true);
-  chassis.wait_drive();
-  set_flywheel(110);
-  chassis.set_turn_pid(0, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(-55, 50, true);
-  // chassis.wait_until(53);
-  chassis.wait_drive();
-  chassis.set_turn_pid(0, TURN_SPEED);
-  chassis.wait_drive();
+ modified_exit_condition();
+  one_mogo_constants();
 
 
-  for (int i = 0; i < 3; i++) {
-    delay(500);
-    engage_indexer();
-  }
-}
-
-
-
-///
-// Turn Example
-///
-void turn_example() {
-  modified_exit_condition();
-
-  // tilter.set_value(HIGH);
+  chassis.set_angle(-10.25);
+  // sets the flywheel
+ // tilter.set_value(HIGH);
   // toggle_tilter();
   set_flywheel(104);
   // set_flywheel_velocity(500);
   
+  //shoots the first set of match loads
+
   delay(3000);
   engage_indexer();
 
-  // set_flywheel_velocity(500);
+
   set_flywheel(107);
   delay(100);
   for (int i = 0; i < 8; i++) {
     delay(700);
     engage_indexer();
   }
-  set_flywheel_velocity(LOW);
+  set_flywheel(92);
   delay(700);
-
-
-  chassis.set_turn_pid(90, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(18.5, 90, true);
-  chassis.wait_until(17);
-  set_intake(120);
-  chassis.wait_drive();
-
-  delay(1000);
-  chassis.set_drive_pid(12.5, 20, true);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(-10.5, 90, true);
-  chassis.wait_drive();
 }
+
+void set_chassis(double inches, int left, int right) {
+  for (Motor m : chassis.left_motors) m.tare_position();
+  for (Motor m : chassis.left_motors) m.tare_position();
+
+  double dist =  (5.0/3.0) * 900 / inches * M_PI * 3.25;
+
+  while (chassis.left_motors[0].get_position() + chassis.right_motors[0].get_position() < 2 * dist) {
+    for (Motor m : chassis.left_motors) m = left;
+    for (Motor m : chassis.left_motors) m = right;
+    delay(10);
+  }
+
+  for (Motor m : chassis.left_motors) m = 0;
+  for (Motor m : chassis.left_motors) m = 0;
+}
+
+void right_comp_auton() { 
+  //constants
+  modified_exit_condition();
+  one_mogo_constants();
+  set_flywheel(105);
+
+  //intake first disk
+  set_intake(INTAKE_POWER);
+  chassis.set_drive_pid(27, 40, true);
+  chassis.wait_until(9);
+  chassis.set_max_speed(20);
+  chassis.wait_drive();
+
+  //angle and shoot 3
+    //aim
+  chassis.set_turn_pid(-161, TURN_SPEED);
+  chassis.wait_drive();
+  set_intake(0);
+    //fire
+  for (int i = 0; i < 3; i++) {
+    delay(1300);
+    engage_indexer();
+  }
+  delay(800);
+
+
+  //aim and intake 2 discs
+  // chassis.set_turn_pid(-45, TURN_SPEED);
+  // chassis.wait_drive();
+
+//   set_intake(INTAKE_POWER);
+
+//   chassis.set_drive_pid(28, 20, true);
+//   // chassis.wait_until(26);
+//   chassis.wait_drive();
+
+//   // chassis.set_max_speed(60);
+//   chassis.set_drive_pid(-38, 100, true);
+//   chassis.wait_drive();
+  chassis.set_turn_pid(-225, TURN_SPEED);
+  chassis.wait_drive();
+  delay(400);
+  two_mogo_constants();
+  chassis.set_drive_pid(31, 35, true);
+  chassis.wait_drive();
+  chassis.set_turn_pid(-180, TURN_SPEED);
+  chassis.wait_drive();
+
+  //roller
+  chassis.set_drive_pid(10, 40, true);
+  chassis.wait_until(3);
+  set_intake(-ROLLER_POWER);
+  chassis.set_max_speed(20);
+  delay(200);
+  set_intake(0);
+
+  // chassis.set_drive_pid(-5, DRIVE_SPEED, true);
+  // chassis.wait_drive();
+
+ }
+
+
 
 void left_comp_auton() {
   modified_exit_condition();
@@ -179,7 +194,7 @@ void left_comp_auton() {
 
 
   //spin up
-  set_flywheel(112);
+  set_flywheel(107);
 
   //get the roller
   set_intake(-ROLLER_POWER);
@@ -188,48 +203,76 @@ void left_comp_auton() {
 
 
   //drive away
-  chassis.set_drive_pid(-6, 20, true);
+  chassis.set_drive_pid(-8, 20, true);
 
   set_intake(0);
 
   chassis.wait_drive();
 
+  //aim toward discs
+  chassis.set_turn_pid(45, TURN_SPEED);
+  chassis.wait_drive();
+
+  // chassis.set_drive_pid(-26, 110, true);
+  // chassis.wait_drive();
+  // set_chassis(-26, -80, -80);
+  // chassis.set_drive_pid(-2, 80, true);
+  // chassis.wait_drive();
+
+
+  // delay(2500);
+  chassis.set_drive_pid(-32, 100, true);
+  chassis.wait_until(-24);
+  chassis.set_drive_pid(8, 60, true);
+  chassis.wait_drive();
+
+
   //aim
+  chassis.set_turn_pid(-28, TURN_SPEED);
+  chassis.wait_drive();
 
-  chassis.set_turn_pid(-18, TURN_SPEED);
-
-  delay(3000);
 
   //fire
-
   for (int i = 0; i < 2; i++) {
-    delay(700);
+
+    delay(1000);
     engage_indexer();
+    set_flywheel(108);
   }
-
   delay(500);
-
-  //aim toward discs
-  chassis.set_turn_pid(-135, TURN_SPEED);
-  chassis.wait_drive();
-
-
-  //lower flywheel speed
   set_flywheel(108);
 
-  //knock over stack
+  //aim
 
-  chassis.set_drive_pid(50, 120, true);
+  // chassis.set_turn_pid(-18, TURN_SPEED);
 
-  chassis.wait_drive();
+  // delay(3000);
 
-  delay(500);
+  // //fire
+
+  // for (int i = 0; i < 2; i++) {
+  //   delay(700);
+  //   engage_indexer();
+  // }
+
+  // delay(500);
+
+
+
+  // //lower flywheel speed
+  // set_flywheel(108);
+
+  // //knock over stack
+  // set_intake(-50);
   
-
+  chassis.set_turn_pid(-135, TURN_SPEED);
+  chassis.wait_drive();
   //intake the stack
-  set_intake(118);
+  set_intake(INTAKE_POWER);
 
-  chassis.set_drive_pid(60, 20, true);
+  chassis.set_drive_pid(39, 20, true);
+  chassis.wait_until(25);
+  chassis.set_max_speed(60);
   chassis.wait_drive();
 
   //aim
@@ -251,7 +294,8 @@ void left_comp_auton() {
 ///
 void prog_skills() {
   modified_exit_condition();
-  one_mogo_constants();
+  // one_mogo_constants();
+  two_mogo_constants();
 
 
   chassis.set_angle(-10.25);
@@ -301,13 +345,14 @@ void prog_skills() {
 
   delay(700);
   
-  
+  //first roller
   //chassis.set_turn_pid(5, TURN_SPEED);
   chassis.wait_drive();
-  chassis.set_drive_pid(16, 50, true);
+  chassis.set_drive_pid(17, 50, true);
   chassis.wait_drive();
-  chassis.set_drive_pid(6, 20, true);
- 
+  chassis.set_drive_pid(4, 20, true);
+  delay(40);  
+
   set_intake(-ROLLER_POWER);
   chassis.wait_drive();
   
@@ -316,18 +361,19 @@ void prog_skills() {
   set_intake(0);
 
   //drives back from roller
-  chassis.set_drive_pid(-12.5, DRIVE_SPEED, true);
+  chassis.set_drive_pid(-14, DRIVE_SPEED, true);
   chassis.wait_drive();
 
   //turns toward other roller
   chassis.set_turn_pid(-86, TURN_SPEED);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(12.5, DRIVE_SPEED, true);
+  chassis.set_drive_pid(13, DRIVE_SPEED, true);
   chassis.wait_drive();
   chassis.set_turn_pid(-86, TURN_SPEED);
   chassis.wait_drive();
   chassis.set_drive_pid(4, 10, true);
+  delay(40);  
 
   //rolls roller
   set_intake(-ROLLER_POWER);
@@ -353,22 +399,25 @@ void prog_skills() {
   chassis.wait_drive();
   chassis.set_drive_pid(16, DRIVE_SPEED, true);
   chassis.wait_drive();
-  chassis.set_turn_pid(-216, TURN_SPEED);
+  chassis.set_turn_pid(-220, TURN_SPEED);
   chassis.wait_drive();
-  chassis.set_angle(-225);
+  chassis.set_angle(-135);
 
   //disc intake
-  set_intake(118);
-
-  chassis.set_drive_pid(70, 50, true);
-  chassis.wait_drive();
-  chassis.set_turn_pid(-135, TURN_SPEED);
-
+  set_intake(125);
+  chassis.set_drive_pid(57, 20, true);
+  chassis.wait_until(50);
+  chassis.set_max_speed(60);
   chassis.wait_drive();
 
-  delay(100);
+  //aim
+  chassis.set_turn_pid(-45, TURN_SPEED);
+  chassis.wait_drive();
+
+
+  delay(500);
   for (int i = 0; i < 3; i++) {
-    delay(700);
+    delay(500);
     engage_indexer();
   }
 

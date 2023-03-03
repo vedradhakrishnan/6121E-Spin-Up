@@ -1,18 +1,23 @@
+#include "autons.hpp"
 #include "main.h"
 #include "pros/rtos.hpp"
+#include <cmath>
 
 bool auton_first = true;
 bool driver_first = true;
 
 
-// void set_chassis(int left, int right) {
-//   drive_bl = left;
-//   drive_lc = left;
-//   drive_fl = left;
+// void set_chassis(double inches, int left, int right) {
+//   for (Motor m : chassis.left_motors) m.tare_position();
+//   for (Motor m : chassis.left_motors) m.tare_position();
 
-//   drive_br = right;
-//   drive_lc = left;
-//   drive_fr = right;
+//   double dist =  (5.0/3.0) * 900 / inches * M_PI * 3.25;
+
+//   while (chassis.left_motors[0].get_position() + chassis.right_motors[0].get_position() < 2 * dist) {
+//     for (Motor m : chassis.left_motors) m = left;
+//     for (Motor m : chassis.left_motors) m = right;
+//     delay(10);
+//   }
 // }
 
 // void tank_drive() {

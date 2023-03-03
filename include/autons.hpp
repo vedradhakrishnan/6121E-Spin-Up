@@ -3,7 +3,7 @@
 #include "EZ-Template/drive/drive.hpp"
 
 extern Drive chassis;
-
+void set_chassis(double inches, int left, int right);
 void drive_example();
 void turn_example();
 void prog_skills();

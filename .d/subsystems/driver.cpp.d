@@ -1,9 +1,10 @@
-bin/subsystems/driver.cpp.o: src/subsystems/driver.cpp include/main.h \
- include/api.h include/pros/adi.h include/pros/colors.h \
- include/pros/distance.h include/pros/error.h include/pros/ext_adi.h \
- include/pros/adi.h include/pros/adi.h include/pros/gps.h \
- include/pros/imu.h include/pros/link.h include/pros/llemu.h \
- include/display/lvgl.h include/display/lv_version.h \
+bin/subsystems/driver.cpp.o: src/subsystems/driver.cpp include/autons.hpp \
+ include/EZ-Template/drive/drive.hpp include/EZ-Template/PID.hpp \
+ include/EZ-Template/util.hpp include/api.h include/pros/adi.h \
+ include/pros/colors.h include/pros/distance.h include/pros/error.h \
+ include/pros/ext_adi.h include/pros/adi.h include/pros/adi.h \
+ include/pros/gps.h include/pros/imu.h include/pros/link.h \
+ include/pros/llemu.h include/display/lvgl.h include/display/lv_version.h \
  include/display/lv_misc/lv_log.h include/display/lv_conf.h \
  include/display/lv_conf_checker.h include/display/lv_misc/lv_task.h \
  include/display/lv_misc/lv_mem.h include/display/lv_misc/lv_log.h \
@@ -76,15 +77,17 @@ bin/subsystems/driver.cpp.o: src/subsystems/driver.cpp include/main.h \
  include/pros/rotation.hpp include/pros/rotation.h include/pros/rtos.hpp \
  include/pros/screen.hpp include/pros/screen.h include/pros/vision.hpp \
  include/pros/vision.h include/pros/link.hpp include/pros/link.h \
- include/EZ-Template/api.hpp include/EZ-Template/PID.hpp \
- include/EZ-Template/util.hpp include/api.h include/EZ-Template/auton.hpp \
- include/EZ-Template/auton_selector.hpp \
- include/EZ-Template/drive/drive.hpp include/EZ-Template/sdcard.hpp \
- include/autons.hpp include/subsystems/globals.hpp include/pros/imu.hpp \
- include/subsystems/indexer.hpp include/subsystems/flywheel.hpp \
- include/subsystems/intake.hpp include/subsystems/expansion.hpp \
- include/subsystems/tilter.hpp include/subsystems/driver.hpp
-include/main.h:
+ include/main.h include/api.h include/EZ-Template/api.hpp \
+ include/EZ-Template/auton.hpp include/EZ-Template/auton_selector.hpp \
+ include/EZ-Template/sdcard.hpp include/subsystems/globals.hpp \
+ include/pros/imu.hpp include/subsystems/indexer.hpp \
+ include/subsystems/flywheel.hpp include/subsystems/intake.hpp \
+ include/subsystems/expansion.hpp include/subsystems/tilter.hpp \
+ include/subsystems/driver.hpp
+include/autons.hpp:
+include/EZ-Template/drive/drive.hpp:
+include/EZ-Template/PID.hpp:
+include/EZ-Template/util.hpp:
 include/api.h:
 include/pros/adi.h:
 include/pros/colors.h:
@@ -237,15 +240,12 @@ include/pros/vision.hpp:
 include/pros/vision.h:
 include/pros/link.hpp:
 include/pros/link.h:
-include/EZ-Template/api.hpp:
-include/EZ-Template/PID.hpp:
-include/EZ-Template/util.hpp:
+include/main.h:
 include/api.h:
+include/EZ-Template/api.hpp:
 include/EZ-Template/auton.hpp:
 include/EZ-Template/auton_selector.hpp:
-include/EZ-Template/drive/drive.hpp:
 include/EZ-Template/sdcard.hpp:
-include/autons.hpp:
 include/subsystems/globals.hpp:
 include/pros/imu.hpp:
 include/subsystems/indexer.hpp:
